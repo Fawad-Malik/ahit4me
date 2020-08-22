@@ -1,0 +1,197 @@
+{% load bootstrap4 %}
+<div class="mt-4">
+
+    {% if error %}
+        <h5 class="text-danger mb-4">
+            {{ error }}
+        </h5>
+    {% endif %}
+    {% if msg %}
+        <h5 class="text-success mb-4">
+            {{ msg }}
+        </h5>
+    {% endif %}
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Name change
+        </div>
+        <div class="card-body">
+            <form action="{% url 'profile_settings' %}" method="post">
+                {% csrf_token %}
+                <p class="card-text">
+                    Please remember your new username well because you need it for login.
+                </p>
+                <p>
+                    {{ user_form.username }}
+                </p>
+                <p>
+                    {{ user_form.first_name }}
+                </p>
+                <p>
+                    {{ user_form.last_name }}
+                </p>
+                <button class="btn btn-dark_lila" type="submit">Save names</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Email change
+        </div>
+        <div class="card-body">
+            <form action="{% url 'profile_settings' %}" method="post">
+                {% csrf_token %}
+                <p class="card-text">
+                    Your email is never public and is only used to provide best user experience to you.
+                </p>
+                <p>
+                    {{ user_form.email }}
+                </p>
+                <p class="hide_me">
+                    {{ user_form.username }}
+                    {{ user_form.first_name }}
+                    {{ user_form.last_name }}
+                </p>
+                <button class="btn btn-dark_lila" type="submit">Save email</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Password Change
+        </div>
+        <div class="card-body">
+            <form action="{% url 'change_password' %}" method="post">
+                {% csrf_token %}
+                <h5 class="card-title">Here you can reset your password</h5>
+                <p class="card-text">
+                    New password will be active, once you log out.
+                </p>
+                <p>
+                    <input class="form-control half_width input-group-sm" title="password" type="password"
+                           placeholder="Current password" name="current_password" required>
+                </p>
+                <p>
+                    <input class="form-control half_width input-group-sm" title="password" type="password"
+                           placeholder="New password" name="password1" required>
+                </p>
+                <p>
+                    <input class="form-control half_width input-group-sm" title="password" type="password"
+                           placeholder="Verify new password" name="password2" required>
+                </p>
+                <button class="btn btn-dark_lila" id="cancel_subscription">Change password</button>
+            </form>
+        </div>
+    </div>
+
+    {% if profile.has_active_subscription %}
+        <div class="card mb-3">
+            <div class="card-header">
+                Cancel subscription
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Your subscription will be cancelled permanently.</h5>
+                <p class="card-text">
+                    To use the service again, you have to re-subscribe again. Hopefully, you will come back.
+                </p>
+                <button class="btn btn-dark_lila" data-toggle="modal" data-target=".cancel_subscription">
+                    Delete my subscription
+                </button>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="card mb-3">
+        <div class="card-header text-danger">
+            Delete Account
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Your account will be deleted completely.</h5>
+            <p class="card-text">and this action can not be undone.
+                content.</p>
+            <button class="btn btn-danger" data-toggle="modal" data-target=".delete_account">
+                Delete my account
+            </button>
+        </div>
+    </div>
+
+    <div class="modal fade cancel_subscription" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Do you really want to cancel your subscription?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{% url 'delete_subscription' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <p>Please verify with your password</p>
+                        <p>
+                            <label for="subscription_cancel_password">Your password</label><br>
+                            <input class="form-control" name="password" type="password"
+                                   id="subscription_cancel_password"
+                                   title="password">
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="link_no_underline" data-dismiss="modal">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger ml-3">
+                            Delete subscription now
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade delete_account" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Do you really want to delete your account?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{% url 'delete_profile' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <p>Please verify with your password</p>
+                        <p>
+                            <label for="delete_account_cancel_password">Your password</label><br>
+                            <input class="form-control" name="password" type="password"
+                                   id="delete_account_cancel_password"
+                                   title="password">
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="link_no_underline" data-dismiss="modal">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger ml-3">
+                            Delete my account now.
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% if isDelete %}
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            'event': 'subscriptionDeleted'
+        });
+    </script>
+{% endif %}

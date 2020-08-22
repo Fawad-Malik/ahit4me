@@ -1,0 +1,672 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% load bootstrap4 %}
+{% block title %}Your Practice Sessions{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/snackbar.css' %}"/>
+{% endblock %}
+
+{% block main %}
+    <div class="col-12 reduce-padding top-title-bar">{% if 'edit' in request.GET %}EDIT{% else %} PREVIEW {% endif %}
+        PRACTICE SESSION
+    </div>
+    {% if request.user.profile.has_active_subscription %}
+        <style>
+            @media (min-width: 1200px) {
+                .container {
+                    max-width: 90%;
+                }
+            }
+
+            @media (min-width: 992px) {
+                .container {
+                    max-width: 90%;
+                }
+            }
+
+            @media (min-width: 768px) {
+                .container {
+                    max-width: 90%;
+                }
+            }
+
+            @media (min-width: 576px) {
+                .container {
+                    max-width: 90%;
+                }
+            }
+
+            .field-container {
+                background-color: #dedede;
+                display: flex;
+                flex-wrap: wrap;
+                padding: 0px 5px 10px 0px;
+                border: 1px solid #dedede;
+                border-radius: 4px;
+            }
+
+            .text-black {
+                color: black !important;
+            }
+
+            p {
+                margin-bottom: 0 !important;
+            }
+
+            .container-box {
+                background-color: #30409D;
+                color: white;
+                display: grid;
+                border: 1px solid;
+                border-radius: 10px;
+                align-items: center;
+                text-align: center;
+                justify-content: center;
+            }
+
+            .btn-sm {
+                border-radius: .4rem !important;
+            }
+        </style>
+        <div class="recipe-detail">
+            <div class="container">
+                {% if not 'edit' in request.GET %}
+                    <div class="row"
+                         style="margin-bottom: 5px; background: white; padding: 5px 0; border: 1px solid darkgray; border-radius: 5px;">
+                        <div class="col-12 reduce-padding">
+                            <div class="col-12 reduce-padding" style="display: flex;flex-wrap: wrap">
+                                <div class="col-2 reduce-padding container-box" style="height: 50px;">
+
+                                </div>
+                                <div class="col-4 reduce-padding container-box" style="height: 50px;">
+                                    What Do You Want
+                                </div>
+                                <div class="col-4 reduce-padding container-box" style="height: 50px;">
+                                    Purpose of Content
+                                </div>
+                                <div class="col-2 reduce-padding container-box" style="height: 50px;">
+                                    Schedule
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12" style="display: flex;flex-wrap: wrap;padding: 0px 10px;">
+                            <div class="col-2 container-box text-uppercase"
+                                 style="min-height: 100px;font-size: large;">
+                                <span>{{  practice.affirmation.category }}</span>
+                            </div>
+                            <div class="col-4 reduce-padding container-box"
+                                 style="background-color: #e7e7e7;line-height: 1.8em;justify-content: unset;padding: 5px">
+                                {% for dream in  practice.affirmation.category.dreams %}
+                                    {% if dream.practice_session|is_already_added:request.user %}
+                                        <span style="color: black;text-align: left;"
+                                              class="on_hover_underline cursor_pointer"
+                                              onclick="openURL('{{ dream.practice_session.get_absolute_url }}')">
+                                                            {{ forloop.counter }}. {{ dream.dream }}<br>
+                                                        </span>
+                                    {% elif not profile.can_have_more_sessions %}
+                                        <span style="color: black;text-align: left;"
+                                              class="on_hover_underline cursor_pointer"
+                                              onclick="openURL('{% url 'profile_subscription' %}')">
+                                                            {{ forloop.counter }}. {{ dream.dream }}<br>
+                                                        </span>
+                                    {% else %}
+                                        <span style="color: black;text-align: left;"
+                                              class="on_hover_underline cursor_pointer"
+                                              onclick="addToPack('{{ dream.practice_session.id }}', '{{ dream.practice_session.get_absolute_url }}')">
+                                                            {{ forloop.counter }}. {{ dream.dream }}<br>
+                                                        </span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="col-4 reduce-padding container-box"
+                                 style="background-color: #e7e7e7;line-height: 1.8em;padding: 5px">
+                                {% for dream in practice.affirmation.category.dreams %}
+                                    <span style="color: black">{{ dream.practice_session.purpose }}<br></span>
+                                {% endfor %}
+                            </div>
+                            <div class="col-2 reduce-padding container-box"
+                                 style="background-color: #e7e7e7;line-height: 1.8em;padding: 5px">
+                                {% for dream in practice.affirmation.category.dreams %}
+                                    <span style="color: black">Minutes-Times of Day<br></span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="row" style="background-color: #dedede; padding: 10px">
+                    <div class="col-lg-12"
+                         style="background-color: white; padding: 5px; display: flex; flex-wrap: wrap">
+                        <div class="col-lg-4 col-sm-12 xs-12 col-md-6 reduce-padding" style="background-color: white;">
+                            <div class="col-lg-12 reduce-padding field-container">
+                                <div class="col-lg-6 reduce-padding">
+                                    <div class="col-lg-12 reduce-padding text-black" style="text-align: left;">
+                                        Session Name
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding">
+                                        <input type="text" class="form-control" readonly
+                                               value="{{ practice.title|title }}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 reduce-padding">
+                                    <div class="col-lg-12 reduce-padding text-black" style="text-align: left;">
+                                        Purpose
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding">
+                                        <input type="text" readonly class="form-control" value="{{ practice.purpose }}">
+                                    </div>
+                                </div>
+                                {% if 'edit' in request.GET %}
+                                    <div class="col-lg-6 reduce-padding">
+                                        <div class="col-lg-12 reduce-padding"
+                                             style="text-align: left;color: black;font-size: small;">
+                                            Area of Life
+                                        </div>
+                                        <div class="col-lg-12 reduce-padding">
+                                            <input type="text" value="{{ practice.affirmation.category }}"
+                                                   class="form-control"
+                                                   readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 reduce-padding">
+                                        <div class="col-lg-12 reduce-padding"
+                                             style="text-align: left;color: black;font-size: small;">
+                                            Sub Area of Life
+                                        </div>
+                                        <div class="col-lg-12 reduce-padding">
+                                            <input type="text" value="{{ practice.affirmation.subcategory }}"
+                                                   class="form-control" readonly>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="col-lg-12 reduce-padding" style="margin: 5px 0;">
+                                        {#                                        <a href="{% url 'practice-session' %}">#}
+                                        <button class="btn btn-primary btn-sm" style="color: white" onclick="openURL()">
+                                            View Session Details
+                                        </button>
+                                        {#                                        </a>#}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {% if 'edit' in request.GET %}
+                                <div class="col-lg-12 reduce-padding"
+                                     style="background-color: #dedede; display: flex;flex-wrap: wrap; padding: 0px 5px 10px 0px; border: 1px solid #dedede; border-radius: 4px;margin-top: 5px">
+                                    <div class="col-lg-6 col-md-6 col-12 reduce-padding"
+                                         style="display: flex;flex-wrap: wrap">
+                                        <div class="col-lg-12 reduce-padding align-left"
+                                             style="color: black;text-align: left;padding: 5px;margin-top: 5px;">
+                                            Session Tracking
+                                        </div>
+                                        <div class="col-lg-4 reduce-padding" style="padding: 0;">
+                                            <div class="col-lg-12 reduce-padding"
+                                                 style="text-align: left;color: black;font-size: small;line-height: normal;">
+                                                Today Time
+                                            </div>
+                                            <div class="col-lg-12 reduce-padding">
+                                                <input type="text" value="{{ today_secs }} mins" class="form-control"
+                                                       style="padding: 2px;"
+                                                       readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 reduce-padding" style="padding: 0;">
+                                            <div class="col-lg-12 reduce-padding"
+                                                 style="text-align: left;color: black;font-size: small;line-height: normal;">
+                                                Total Time
+                                            </div>
+                                            <div class="col-lg-12 reduce-padding">
+                                                <input type="text" value="{{ total_time }} hours" class="form-control"
+                                                       style="padding: 2px;"
+                                                       readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 reduce-padding" style="padding: 0;">
+                                            <div class="col-lg-12 reduce-padding"
+                                                 style="text-align: left;color: black;font-size: small;line-height: normal;">
+                                                Total Reps
+                                            </div>
+                                            <div class="col-lg-12 reduce-padding">
+                                                <input type="text" value="{{ reps_done }}" class="form-control"
+                                                       style="padding: 2px;"
+                                                       readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-12 reduce-padding">
+                                        <div class="col-12 reduce-padding" style="padding: 0;">
+                                            <div class="col-lg-12 reduce-padding"
+                                                 style="text-align: left;color: black;font-size: small;">
+                                                How Doing
+                                            </div>
+                                            <div class="col-lg-12 reduce-padding">
+                                                <input type="text" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 reduce-padding" style="padding: 0;">
+                                            <div class="col-lg-12 reduce-padding"
+                                                 style="text-align: left;color: black;font-size: small;">
+                                                Ideas From
+                                            </div>
+                                            <div class="col-lg-12 reduce-padding">
+                                                <input type="text" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 reduce-padding"
+                                     style="background-color: #dedede; display: flex;flex-wrap: wrap; padding: 0px 5px 10px 0px; border: 1px solid #dedede; border-radius: 4px;margin-top: 5px">
+                                    <div class="col-md-6 col-lg-6 col-12 reduce-padding"
+                                         style="display: flex;flex-wrap: wrap">
+                                        <div class="col-lg-12 reduce-padding align-left"
+                                             style="color: black;text-align: left;padding: 5px;margin-top: 5px;">
+                                            Session Makeup
+                                        </div>
+                                        <div class="col-lg-4 reduce-padding" style="padding: 0;">
+                                            <div class="col-lg-12 reduce-padding"
+                                                 style="text-align: left;color: black;font-size: small;padding: 0;">
+                                                Cycles
+                                            </div>
+                                            <div class="col-lg-12 reduce-padding" style="padding: 0;">
+                                                <input type="number" class="form-control"
+                                                       value="{{ user_settings.ps_cycles }}"
+                                                       id="ps_cycles" placeholder="Cycles">
+                                                <input type="hidden" value="{{ practice.id }}" id="practice_id">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 reduce-padding" style="padding: 0;">
+                                            <div class="col-lg-12 reduce-padding"
+                                                 style="text-align: left;color: black;font-size: small;padding: 0">
+                                                Font Size
+                                            </div>
+                                            <div class="col-lg-12 reduce-padding" style="padding: 0;">
+                                                <input type="number" class="form-control" min="15" max="30"
+                                                       value="{{ user_settings.font_size }}" id="font_size"
+                                                       placeholder="Font Size">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 reduce-padding" style="padding: 0;">
+                                            <div class="col-lg-12 reduce-padding"
+                                                 style="text-align: left;color: black;font-size: small;padding: 0;">
+                                                Brightness
+                                            </div>
+                                            <div class="col-lg-12 reduce-padding" style="padding: 0;">
+                                                <input type="number" class="form-control" min="20" max="100"
+                                                       value="{{ user_settings.brightness }}" id="brightness"
+                                                       placeholder="brightness">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 col-12 reduce-padding"
+                                         style="display: flex;flex-wrap: wrap;padding: 5px;">
+                                        <div class="col-lg-12 reduce-padding"
+                                             style="padding: 0;display: flex;flex-wrap: wrap;">
+                                            <div class="col-lg-6 reduce-padding"
+                                                 style="text-align: left;color: black;font-size: small;padding: 5px 0;">
+                                                Slide Duration
+                                            </div>
+                                            <div class="col-lg-6 reduce-padding">
+                                                <input type="number" class="form-control"
+                                                       value="{{ user_settings.duration_in_secs }}"
+                                                       id="duration_in_secs"
+                                                       placeholder="Duration in seconds">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 reduce-padding"
+                                             style="padding: 0;display: flex;flex-wrap: wrap;">
+                                            <div class="col-lg-6 reduce-padding"
+                                                 style="text-align: left;color: black;font-size: small;padding: 5px 0;">
+                                                Images
+                                            </div>
+                                            <div class="col-lg-6 reduce-padding">
+                                                <input type="number" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 reduce-padding"
+                                     style="background-color: white; display: flex;flex-wrap: wrap; padding: 0px 5px 10px 0px; border: 1px solid darkgrey; border-radius: 4px;margin-top: 5px">
+                                    <div class="col-4 col-md-4 col-lg-4 reduce-padding">
+                                        <div class="col-12 reduce-padding" style="margin: 5px 0;">
+                                            <a href="{% url 'practice-session' %}">
+                                                <button class="btn btn-warning btn-sm"
+                                                        style="padding: 10px;color: white;width: 100%;">
+                                                    Back to Session
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-4 col-lg-4 reduce-padding">
+                                        <div class="col-12 reduce-padding"
+                                             style="margin: 5px 0;font-size: small;color: black;">
+                                            Practice<br> You CAN Do It
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-4 col-lg-4 reduce-padding">
+                                        <div class="col-12 reduce-padding" style="margin: 5px 0;">
+                                            <a class="play_link"
+                                               data-url="{% url 'practice_play' practice.title|slugify practice.id %}">
+                                                <button class="btn btn-sm btn-success"
+                                                        style="padding: 10px;width: 100%;">
+                                                    Play Session
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-4 col-lg-4 reduce-padding">
+                                        <div class="col-12 reduce-padding" style="margin: 5px 0;">
+                                            <a href="{{ practice.get_absolute_url }}">
+                                                <button class="btn btn-success btn-sm"
+                                                        style="padding: 10px;width: 100%;">
+                                                    Preview
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-4 col-lg-4 reduce-padding">
+                                        <div class="col-12 reduce-padding" style="margin: 5px 0;">
+                                            <button class="btn btn-primary btn-sm save_preferences"
+                                                    style="padding: 10px;width: 100%;">
+                                                Save Changes
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-4 col-lg-4 reduce-padding">
+                                        <div class="col-12 reduce-padding" style="margin: 5px 0;">
+                                            <a href="{% url 'remove_from_pack' practice.id %}">
+                                                <button class="btn btn-danger btn-sm"
+                                                        style="color: white;padding: 10px;width: 100%;">
+                                                    Delete Session
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="row" style="display: flex;flex-wrap: wrap;margin-top: 25px">
+                                {% for image in practice.practice_session_images.all %}
+                                    <div class="col-lg-6 col-6 reduce-padding" style="margin-top: 15px">
+                                        <div class="col-lg-12 reduce-padding">
+                                            <div class="dashboard-box clearfix"
+                                                 style="padding: 10px 0px 10px 0px; border-radius: 5px;">
+                                                {{ image.related_tags }}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 reduce-padding" style="margin-top: 10px">
+                                            <img src="{{ image.image.url }}" class="ps_image" width="100%">
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12 xs-12 col-md-6 reduce-padding" style="background-color: white !important;">
+
+                            <div class="col-lg-12 reduce-padding"
+                                 style="background-color: #dedede !important;padding: 4px 5px 10px 5px; border: 1px solid #dedede; border-radius: 4px;">
+                                <div class="col-lg-12 reduce-padding text-center dashboard-box clearfix text-dark"
+                                     style="padding: 5px;box-shadow: unset;border: 1px solid black;height: max-content;margin-bottom: 2px; background-color: white !important;border-radius: 5px;">
+                                    <div class="col-lg-12 reduce-padding" style="background-color:white !important;">
+                                        Positive Phrases to Program
+                                        {% if 'edit' in request.GET %}
+                                            <input value="false"
+                                                   name="isMantra" type="radio" style="height: 16px;width: 16px">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 reduce-padding dashboard-box clearfix text-dark"
+                                     style="padding: 5px;box-shadow: unset;border: 1px solid black;height: max-content;margin-bottom: 2px;background-color: white !important;font-size: small;border-radius: 5px">
+                                    {% for affirmation in practice.affirmation.ordered_affirmations %}
+                                        <div class="col-lg-12 reduce-padding text-dark"
+                                             id="ps-text-{{ affirmation.id }}"
+                                             style="margin-top: 10px;font-weight: 600;text-align: left">
+                                            {{ affirmation.text|linebreaks }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12 xs-12 col-md-6 reduce-padding" style="background-color: white;">
+                            <div class="col-lg-12 reduce-padding"
+                                 style="background-color: #dedede;padding: 4px 5px 10px 5px; border: 1px solid #dedede; border-radius: 4px;">
+                                <div class="col-lg-12 reduce-padding text-center dashboard-box clearfix text-dark"
+                                     style="padding: 5px;box-shadow: unset;border: 1px solid black;height: max-content;margin-bottom: 2px;background-color: white !important;border-radius: 5px;">
+                                    <div class="col-lg-12 reduce-padding">
+                                        Refined Mantra
+                                        {% if 'edit' in request.GET %}
+                                            <input value="true"
+                                                   name="isMantra" type="radio" style="height: 16px;width: 16px">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 reduce-padding text-center dashboard-box clearfix text-dark"
+                                     style="padding: 5px;box-shadow: unset;border: 1px solid black;height: max-content;margin-bottom: 2px;background-color: white !important;font-size: small;border-radius: 5px">
+                                    {% for affirmation in practice.affirmation.ordered_affirmations %}
+                                        <div class="col-lg-12 reduce-padding text-dark ps-mantra"
+                                             style="margin-top: 10px;text-align: left;display: flex; align-items: center;"
+                                             data-id="{{ affirmation.id }}"
+                                        >
+                                            <p style="font-weight: 600">{{ affirmation.mantra }}</p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% if not 'edit' in request.GET %}
+                                <div class="col-lg-12 reduce-padding" style="margin: 5px 0;text-align: left">
+                                    <a class="play_link"
+                                       data-url="{% url 'practice_play' practice.title|slugify practice.id %}">
+                                        <button class="btn btn-sm btn-success">
+                                            <i class="far fa-play-circle"></i> Play my session
+                                        </button>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade images_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Select images you like</h5>
+                            <button type="submit" class="btn btn-primary">Add selected images</button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="col-lg-9 container">
+                                <div class="row">
+                                    {% for image in images %}
+                                        <div class="col-6 col-md-4">
+                                            <div class="image_checkbox_container">
+                                                <img src="{{ image.image.url }}" class="ps_image" width="100%"
+                                                     data-checkbox="check{{ image.id }}">
+                                                {% if practice in image.practice_session.all %}
+                                                    <input type="checkbox" name="ps_images" class="checkbox" checked
+                                                           value="{{ image.id }}" id="check{{ image.id }}"/>
+                                                {% else %}
+                                                    <input type="checkbox" name="ps_images" class="checkbox"
+                                                           value="{{ image.id }}" id="check{{ image.id }}"/>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Add selected images</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade rate_fulfilment" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">How was your fulfilment?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-lg-10 container">
+                            <div class="row">
+                                <p>
+                                    <span class="d-block">Please rate your fulfilment </span><br>
+                                    <span class="rate_number">1</span>
+                                    <span class="rate_number">2</span>
+                                    <span class="rate_number">3</span>
+                                    <span class="rate_number">4</span>
+                                    <span class="rate_number">5</span>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark_lila" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="snackbar"></div>
+    {% else %}
+        <div class="recipe-detail min_height_600">
+            <div class="container">
+                <div class="col-12">
+                    Please subscribe to one of our plan to view this page. <a href="{% url 'profile_subscription' %}">Click
+                    Here</a> to go to the subscription page.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+    {% if request.user.profile.has_active_subscription %}
+        <script>
+            $(function () {
+
+                var exited_from_play = {% if 'exited_from_play' in request.GET %}true{% else %}false{% endif %};
+
+                if (exited_from_play) {
+                    $('.rate_fulfilment').modal('show');
+                }
+
+                $('.rate_number').on('click', function () {
+                    var fulfilment = $(this).text();
+
+                    $('.rate_number').each(function () {
+                        $(this).removeClass('rate_number_clicked');
+                    });
+
+                    $(this).addClass('rate_number_clicked');
+
+                    $.ajax({
+                        url: '{% url "count_fulfilment" practice.title|slugify practice.id %}',
+                        type: 'post',
+                        data: {
+                            'fulfilment': fulfilment,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        }
+                    });
+
+                });
+
+                $('.ps_image').on('click', function () {
+
+                    var image_selector = $(this).data('checkbox');
+
+                    if ($('#' + image_selector).is(':checked')) {
+                        $(this).next('input').prop('checked', false);
+                    } else {
+                        $(this).next('input').prop('checked', true);
+                    }
+
+                });
+
+                $('.play_link').on('click', function () {
+                    var link = $(this).data('url');
+                    location.replace('//{{ request.META.HTTP_HOST }}' + link);
+                });
+
+                $('.save_preferences').on('click', function () {
+                    var practice_id = $('#practice_id').val();
+                    var duration_in_secs = $('#duration_in_secs').val();
+                    var font_size = $('#font_size').val();
+                    var brightness = $('#brightness').val();
+                    var ps_cycles = $('#ps_cycles').val();
+                    var isMantra = $("input[name='isMantra']:checked").val();
+                    if (brightness > 100) {
+                        brightness = 100;
+                    } else if (brightness < 20) {
+                        brightness = 20;
+                    }
+                    if (font_size > 35) {
+                        font_size = 35;
+                    } else if (font_size < 15) {
+                        font_size = 15;
+                    }
+                    if (ps_cycles <= 0) {
+                        ps_cycles = 1;
+                    }
+                    $.ajax({
+                        url: '/practice/set_seconds/' + practice_id + '/?seconds=' + duration_in_secs + '&font_size=' + font_size + '&brightness=' + brightness + '&ps_cycles=' + ps_cycles + '&isMantra=' + isMantra,
+                        type: 'get',
+                        success: function () {
+                            var x = document.getElementById("snackbar");
+                            x.innerText = 'Settings saved successfully...'
+                            x.className = "show success";
+                            setTimeout(function () {
+                                x.className = x.className.replace("show success", "");
+                            }, 3000);
+                        },
+                        error: function () {
+                            var x = document.getElementById("snackbar");
+                            x.innerText = 'Unable to save settings...'
+                            x.className = "show error";
+                            setTimeout(function () {
+                                x.className = x.className.replace("show error", "");
+                            }, 3000);
+                        }
+                    })
+                });
+                if ('{{ user_settings.ps_ismantra }}' == 'False') {
+                    $("input[name='isMantra'][value='false']").prop("checked", true);
+                } else {
+                    $("input[name='isMantra'][value='true']").prop("checked", true);
+                }
+            });
+
+            {#$('textarea').each(function () {#}
+            {#    const text = $(this).text().replace(/\s/gm, " ");#}
+            {#    $(this).text(text);#}
+            {#    const text2 = $(this).text().replace("                                        ", "");#}
+            {#    $(this).text(text2);#}
+            {#    $(this).height($(this).prop('scrollHeight'));#}
+            {# }); #}
+        </script>
+    {% endif %}
+    <script>
+        $('.ps-mantra').each(function () {
+            $(this).css('height', $('#ps-text-' + $(this).data("id")).height() + 'px'.toString());
+        });
+
+        function openURL() {
+            window.location = '?edit=true';
+        }
+    </script>
+{% endblock %}

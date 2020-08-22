@@ -1,0 +1,41 @@
+{% load bootstrap4 %}
+<div class="mt-4">
+
+    {% if error %}
+        <h5 class="text-danger mb-4">
+            {{ error }}
+        </h5>
+    {% endif %}
+    {% if msg %}
+        <h5 class="text-success mb-4">
+            {{ msg }}
+        </h5>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header">
+            ACCOUNT DETAILS
+        </div>
+        <div class="card-body">
+            <p class="card-title thin_text">Name: {{ request.user.first_name }} {{ request.user.last_name }}</p>
+            <p class="card-title thin_text">Username: {{ request.user.username }}</p>
+            <p class="card-title thin_text">Email: {{ request.user.email }}</p>
+            <p class="card-text">
+                Joined at: {{ request.user.date_joined }}
+            </p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            Logout
+        </div>
+        <div class="card-body">
+            <a class="btn btn-primary" href="{% url 'logout' %}">
+                <i class="fa fa-sign-out-alt"></i> Logout
+            </a>
+
+        </div>
+    </div>
+
+</div>

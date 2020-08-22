@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static custom_tags %}
+{% load bootstrap4 %}
+{% block title %}Let's capture your thoughts{% endblock %}
+
+{% block main %}
+    {% if request.user.profile.has_active_subscription %}
+        <div class="recipe-detail min_height_600">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <div class="table-responsive tableGradient">
+                            <div class="tableUpRowDiv">
+                                The 3 Areas of Life
+                            </div>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr style="background-color: #30409D; color: white;width: 33.333%">
+                                    {% for category in categories %}
+                                        <th style="text-align: center" scope="col">{{ category }}</th>
+                                    {% endfor %}
+                                </tr>
+                                </thead>
+                                <tbody style="color: white; font-size: 15px">
+                                {% for row in table_rows %}
+                                    <tr>
+                                        {% for item in row %}
+                                            {% if item.category %}
+                                                <td style="text-align: center;cursor: pointer;width: 33.333%;"
+                                                    onclick="openCategory('{{ item.category }}/{{ item.sub_cat }}')">
+                                                    {{ item.sub_cat }}
+                                                </td>
+                                            {% else %}
+                                                <td style="text-align: center;"></td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="recipe-detail min_height_600">
+            <div class="container">
+                <div class="col-12">
+                    Please subscribe to one of our plan to view this page. <a href="{% url 'profile_subscription' %}">Click
+                    Here</a> to go to the subscription page.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block extra_js %}
+    <script>
+        function openCategory(val) {
+            window.location.href = val;
+        }
+    </script>
+{% endblock %}

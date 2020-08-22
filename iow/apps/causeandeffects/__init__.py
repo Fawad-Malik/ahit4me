@@ -1,0 +1,1 @@
+default_app_config = 'iow.apps.causeandeffects.apps.CauseandeffectsConfig'

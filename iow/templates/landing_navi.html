@@ -1,0 +1,53 @@
+{% load bootstrap4 %}
+<style>
+    @media (min-width: 1023px) and (max-width: 1200px) {
+        .collapse {
+            display: none !important;
+        }
+    }
+    table{
+        border-collapse:collapse;
+    }
+    ul > li:last-child
+    {
+        float:right;
+    }
+</style>
+<div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav" style="overflow:auto;margin-right:20px;">
+        <li class="nav-item {% if request.resolver_match.view_name == 'landing_discover' %}active{% endif %}">
+            <a class="nav-link" href="{% url 'landing_discover' %}">EXPLORE</a>
+        </li>
+        <li class="nav-item {% if request.resolver_match.view_name == 'awareness' %}active{% endif %}">
+            <a class="nav-link" href="#how_to">
+                HOW TO
+            </a>
+        </li>
+        <li class="nav-item {% if request.resolver_match.view_name == 'landing_help' %}active{% endif %}">
+            <a class="nav-link" href="{% url 'landing_help' %}">
+                HELP
+            </a>
+        </li>
+        {% if request.user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard' %}">
+                    HOME
+                </a>
+            </li>
+        {% endif %}
+
+    <li class="nav-item btn-submit-recipe" style="position: absolute; float:right;">
+        {% if request.user.is_authenticated %}
+            <a class="nav-link no_bg_color" style="padding-left: .5rem" href="{% url 'profile' %}">
+{#                {{ request.user.username }}#}
+                My Account
+            </a>
+        {% else %}
+            <a class="nav-link no_bg_color" style="padding-left: .5rem" href="{% url 'landing_login' %}">
+                <i class="fa fa-user-circle" aria-hidden="true"></i>
+                Log in
+            </a>
+        {% endif %}
+    </li>
+    </ul>
+</div>

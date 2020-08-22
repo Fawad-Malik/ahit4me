@@ -1,0 +1,20 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+{% block title %}{{ title }} | ahit4me.com Administration{% endblock %}
+
+{% block extrastyle %}
+    <style>
+        .vTimeField {
+            width: 75px!important;
+        }
+    </style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">ahit4me.com Administration</a> &nbsp;
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block title %}Your Practice Sessions - Performance Stats{% endblock %}
+
+{% block main %}
+    <div class="recipe-detail">
+        <div class="container">
+            <div class="row justify-content-center">
+
+                <div class="col-lg-12 text-center">
+                    <h2>Your performance in this practice sesssion</h2>
+                </div>
+
+                <div class="col-lg-8">
+
+                    <div class="text-center pt-1 pb-2">
+                        <h5>
+                            Practice session:
+                            <a href="{% url 'practice_detail' practice.title|slugify practice.id %}">
+                                {{ practice.title|title }}
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div class="col-lg-12 pb-5 pt-4">
+                        <h4 class="text-center text-dark">
+                            My Performance
+                        </h4>
+                        <canvas id="performance"></canvas>
+                    </div>
+
+
+                    <div class="col-lg-12">
+                        <h4 class="text-center text-dark">
+                            My Feelings
+                        </h4>
+                        <canvas id="feelings"></canvas>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade images_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Select images you like</h5>
+                        <button type="submit" class="btn btn-primary">Add selected images</button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="col-lg-9 container">
+                            <div class="row">
+                                {% for image in images %}
+                                    <div class="col-6 col-md-4">
+                                        <div class="image_checkbox_container">
+                                            <img src="{{ image.image.url }}" class="ps_image" width="100%" data-checkbox="check{{ image.id }}">
+                                            {% if practice in image.practice_session.all %}
+                                                <input type="checkbox" name="ps_images" class="checkbox" checked value="{{ image.id }}" id="check{{ image.id }}"/>
+                                            {% else %}
+                                                <input type="checkbox" name="ps_images" class="checkbox" value="{{ image.id }}" id="check{{ image.id }}"/>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Add selected images</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/plugins/Chart.js' %}"></script>
+    <script>
+        var ctx = document.getElementById("performance").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                datasets: [{
+                    label: 'My performance',
+                    data: [12, 19, 3, 5, 2, 3, 5],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+		var config = {
+			type: 'line',
+			data: {
+				labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+				datasets: [{
+					label: 'My feelings',
+					backgroundColor: 'rgba(255, 99, 132, 0.2)',
+					borderColor: 'rgba(255,99,132,1)',
+					data: [
+						12, 3, 34, 12, 11, 10, 5
+					],
+					fill: false
+				}]
+			},
+			options: {
+				responsive: true,
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'How I am doing'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Feeling'
+						}
+					}]
+				}
+			}
+		};
+
+		window.onload = function() {
+			var ctx = document.getElementById('feelings').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+		};
+    </script>
+{% endblock %}

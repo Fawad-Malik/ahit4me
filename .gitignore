@@ -1,0 +1,13 @@
+*.pyc
+*/static/*
+*/media/*
+.idea/*
+.env
+error_log*
+.DS_Store
+log/*
+
+server_data/*
+backup_file.psql
+.vscode/
+

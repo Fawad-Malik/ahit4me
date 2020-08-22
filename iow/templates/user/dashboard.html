@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static custom_tags %}
+{% load bootstrap4 %}
+
+{% block extra_css %}
+    <style>
+        .bg-circles {
+            background: radial-gradient(#4f5cf9, #4f5cf9 20%, #4051f9 20%, #4051f9 45%, #3349f9 45%, #3349f9 63%, #3347f0 63%, #3347f0 70%, #0033f8 70%, #0033f8);
+        }
+
+        .blue-bg {
+            background-color: rgb(0, 46, 248) !important;
+            border-radius: 10px !important; 
+            border: 1.5px solid black !important;
+        }
+
+        .border-1 {
+            border-radius: 10px !important; 
+            border: 1.5px solid black !important;
+        }
+
+        .flex-center {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .display-flex {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .div-text {
+            font-size: 29px;
+            color: white !important;
+            padding: 50px;
+        }
+        
+        .border-bottom {
+            border-bottom: 2px solid white !important;
+        }
+
+        .border-left {
+            border-left: 2px solid white !important;
+        }
+
+        .border-right {
+            border-right: 2px solid white !important;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    <div class="col-12 top-title-bar" style="border-bottom: 1.5px solid black; color:black;">
+        Your Home Base to Create a Life of Abundance
+    </div>
+    <div class="col-12 text-center flex-center">
+        <div class="col-lg-9 col-md-12 col-sm-12 blue-bg reduce-padding display-flex">
+            <div class="col-4" style="color: white !important;font-size:19px !important;padding-top:6px !important;">
+                The Cause & Effect of Practice
+            </div>
+
+            <div class="col-4" style="color: white !important;font-size:19px !important;padding-top:6px !important;">
+                To Realize Human High Potential
+            </div>
+
+            <div class="col-4" style="color: white !important;  font-size:19px !important;padding-top:6px !important;">
+                Best Effort=Best Results
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 text-center flex-center" style="margin-top: 30px">
+        <div class="col-lg-9 col-md-12 col-sm-12 display-flex bg-circles border-1">
+            <div class="col-lg-4 col-md-4 col-sm-12 border-bottom" style="color: white !important; padding-top: 60px !important;">
+                Whatever You Practice <br> You will Create in Your Life<br> Choose Well & Enjoy
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 border-bottom" style="color: white !important; padding-top: 50px !important; font-size:21px !important;">
+                Explore, Dream & Practice<br> To Realize your<br> Human Right Potential
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 border-bottom" style="color: white !important;  padding-top: 60px !important;">
+                More Energy & Control <br> Will Give You More Progress <br> Remember Best Effort
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-12 div-text border-right border-bottom" style="color: white !important; text-align:center !important;">
+                <a href="{% url 'knowledge_index' %}" class="link_no_underline" style="color: white !important; text-align:center !important;">
+                Fundamental<br> Knowledge &<br> Technique
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 div-text border-right border-bottom" style="color: white !important;">
+                <a href="{% url 'awareness_questions' %}" class="link_no_underline" style="color: white !important; text-align:center !important;">
+                Accelerating <br> Awareness
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 div-text border-bottom" style="color: white !important;">
+                <a href="#" class="link_no_underline" style="color: white !important; text-align:center !important;">
+                Scheduling<br> & Monitoring<br> Growth
+                </a>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-12 div-text border-right" style="color: white !important; text-align:center !important;">
+                <a href="#" class="link_no_underline" style="color: white !important; text-align:center !important;">
+                High Performance<br> Techniques
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 div-text border-right" style="color: white !important;">
+                <a href="{% url 'practice-session' %}" class="link_no_underline" style="color: white !important; text-align:center !important;">
+                Practice Room<br> 4 Max IC TE ET<br>2 Accelerate Growth
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 div-text" style="color: white !important;">
+                <a href="#" class="link_no_underline" style="color: white !important; text-align:center !important;">
+                Journal &<br> Reminder<br> 2 B Effective
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

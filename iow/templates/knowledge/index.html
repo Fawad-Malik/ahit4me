@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {#    {{ knowledges.first.title }}#}
+    Knowledge & Techniques
+{% endblock %}
+
+{% block main %}
+    {% if request.user.profile.has_active_subscription %}
+        <div class="recipe-detail">
+
+            <div class="container" style="min-height: 300px;">
+
+                {#            <div class="row justify-content-center mb-5">#}
+                {#                <div class="col-lg-12 text-center">#}
+                {#                    <h1 class="no_font_weight">{{ page_text.headline|capfirst }}</h1>#}
+                {#                    <h1 class="no_font_weight">KNOWLEDGE & TECHNIQUES</h1>#}
+                {#                </div>#}
+                {#            </div>#}
+
+                <div class="row">
+                    <div class="col-lg-12 pb-2 reduce-padding">
+                        <div class="dashboard-box clearfix">
+                            <h4 class="font-weight-bold">
+                                KNOWLEDGE & TECHNIQUES
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+
+                    {% if not knowledges %}
+                        <div class="col-lg-12 pb-5 text-center">
+                            <p class="thin_text">
+                                No Knowledge Content available.
+                            </p>
+                        </div>
+
+                    {% endif %}
+
+                    {% for knowledge in knowledges %}
+                        <div class="col-lg-6 col-sm-12 col-md-6 col-12 pb-2 reduce-padding">
+                            <a href="{{ knowledge.get_absolute_url }}"
+                               class="link_no_underline">
+                                <div class="dashboard-box clearfix" style="padding: 17px 0 10px 0 ">
+                                    <h5 class="font-weight-bold">
+                                        {{ knowledge.title }}
+                                    </h5>
+                                    <small>
+                                        Read time ~4 mins
+                                    </small>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="recipe-detail min_height_600">
+            <div class="container">
+                <div class="col-12">
+                    Please subscribe to one of our plan to view this page. <a href="{% url 'profile_subscription' %}">Click
+                    Here</a> to go to the subscription page.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

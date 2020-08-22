@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block title %}Create Your Practice Sessions{% endblock %}
+
+{% block extra_css %}
+    <style>
+        #sub_categories_2select, #affirmations_2select, #all_categories_2select {
+            width: auto !important;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <div class="recipe-detail">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-12 text-center">
+                    <h1>My Packs</h1>
+                </div>
+            </div>
+            <div class="row">
+                {% if not all_categories %}
+                    <h3>
+                        You do not have any pack yet. Start adding Sessions from Discover page.
+                    </h3>
+                {% endif %}
+
+                {% for cat in all_categories %}
+
+                    {% if cat.practice_sessions %}
+                        <div class="col-lg-12 {% if not forloop.first %}pt-6{% endif %}">
+                            <h2>{{ cat.name|capfirst }}</h2>
+                        </div>
+
+                        {% for ps in cat.practice_sessions %}
+                            <div class="col-lg-4 pb-4">
+                                <a href="{% url 'practice_detail' ps.affirmation.title|slugify ps.id %}"
+                                   class="link_no_underline">
+                                    <div class="box clearfix">
+                                        <h4 class="pb-4 font-weight-bold">
+                                            {{ ps.affirmation.title }}
+                                        </h4>
+                                        <p>
+                                            {{ ps.affirmation.affirmation_texts.count }} Affirmations <br>
+                                            {{ ps.affirmation.category.name }}, {{ ps.affirmation.subcategory.name }}
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade affirmations_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add your affirmations</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-lg-12">
+
+                            <select class="form-control" id="all_categories_2select" title="all_categories_2select">
+                                <option value="0">Select Category</option>
+                                {% for cat in all_categories %}
+                                    <option value="{{ cat.id }}">{{ cat.name|capfirst }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <select class="form-control mt-4 hide_me" id="sub_categories_2select"
+                                    title="sub_categories_2select">
+                                <option value="0">Select Subcategory</option>
+                            </select>
+
+                            <select class="form-control mt-4 hide_me" id="affirmations_2select"
+                                    title="affirmations_2select">
+                                <option value="0">Select Affirmation</option>
+                            </select>
+
+                            <p class="mt-5 hide_me">
+                                <button class="btn btn-info btn-xsm">Back to selection</button>
+                            </p>
+
+                            <div id="chosen_affirmation_text" class="mt-3"></div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <form method="post" id="create_session_form">
+                            {% csrf_token %}
+                            <input name="affirmation" title="affirmation" id="selected_affirmation_id" class="hide_me">
+                        </form>
+                        <button type="submit" class="btn btn-primary hide_me add_button">Add selected affirmations
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade deleted_modal_confirmation" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5>
+                        Practice Session was successfully deleted.
+                    </h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal" aria-label="Close">
+                        Ok
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+    <script>
+        var PracticeCreator = {};
+
+        PracticeCreator.preset_selection = function (node, value, default_text) {
+            node.innerHTML = '';
+            var option = document.createElement('option');
+            option.value = value;
+            option.textContent = default_text;
+            node.appendChild(option);
+        };
+
+        PracticeCreator.populate_subcats = function (cat_id) {
+            PracticeCreator.reset_selections();
+
+            $.ajax({
+                url: '/practice/fetch_sub_cats/' + cat_id + '/',
+                type: 'get'
+            }).done(function (data) {
+                var select = document.getElementById("sub_categories_2select");
+
+                PracticeCreator.preset_selection(select, '0', 'Select Subcategory');
+
+                data.forEach(function (item) {
+                    var option = document.createElement('option');
+                    option.value = item['id'];
+                    option.textContent = 'Subcategory: ' + item['name'];
+
+                    select.appendChild(option);
+                });
+                $(select).removeClass('hide_me');
+            });
+        };
+
+        PracticeCreator.populate_affirmations = function (sub_cat_id) {
+            $.ajax({
+                url: '/practice/fetch_affirmations/' + sub_cat_id + '/',
+                type: 'get'
+            }).done(function (data) {
+                var select = document.getElementById("affirmations_2select");
+
+                PracticeCreator.preset_selection(select, '0', 'Select Affirmation');
+
+                data.forEach(function (item) {
+                    var option = document.createElement('option');
+                    option.value = item['id'];
+                    option.textContent = 'Affirmation: ' + item['title'];
+
+                    select.appendChild(option);
+                });
+                $(select).removeClass('hide_me');
+            });
+        };
+
+        PracticeCreator.populate_affirmation_text = function (affirmation_id) {
+            $.ajax({
+                url: '/practice/fetch_affirmation_text/' + affirmation_id + '/',
+                type: 'get'
+            }).done(function (data) {
+
+                var div = document.getElementById("chosen_affirmation_text");
+                div.textContent = '';
+
+                data.forEach(function (item) {
+                    var parag = document.createElement('p');
+                    parag.textContent = item['text'];
+                    div.appendChild(parag);
+                });
+                $(div).removeClass('hide_me');
+                $('.add_button').removeClass('hide_me');
+
+                $('#selected_affirmation_id').val(affirmation_id);
+            });
+        };
+
+        PracticeCreator.reset_selections = function () {
+            $("#sub_categories_2select").addClass('hide_me');
+            $("#affirmations_2select").addClass('hide_me');
+            $('#chosen_affirmation_text').addClass('hide_me');
+            $(".add_button").addClass('hide_me');
+        };
+
+        PracticeCreator.reset_sub_selections = function () {
+            $("#affirmations_2select").addClass('hide_me');
+            $('#chosen_affirmation_text').addClass('hide_me');
+            $(".add_button").addClass('hide_me');
+        };
+
+        $(function () {
+            // show modal if practice session is deleted
+            var deleted_param = '{{ request.GET.deleted }}';
+            if (deleted_param) {
+                $('.deleted_modal_confirmation').modal();
+            }
+
+            // render next sub cats if cat is selected
+            $('#all_categories_2select').on('change', function () {
+                var cat_id = $(this).val();
+                if (cat_id === '0') {
+                    PracticeCreator.reset_selections();
+                    return
+                }
+                PracticeCreator.populate_subcats(cat_id);
+            });
+
+            $('#sub_categories_2select').on('change', function () {
+                var sub_cat_id = $(this).val();
+                if (sub_cat_id === '0') {
+                    PracticeCreator.reset_sub_selections();
+                    return
+                }
+                PracticeCreator.populate_affirmations(sub_cat_id);
+            });
+
+            $('#affirmations_2select').on('change', function () {
+                var affirmation_id = $(this).val();
+                if (affirmation_id === '0') {
+                    $('#chosen_affirmation_text').addClass('hide_me');
+                    $('.add_button').addClass('hide_me');
+                    return
+                }
+                PracticeCreator.populate_affirmation_text(affirmation_id);
+            });
+
+            $('.add_button').on('click', function () {
+                var selected_affirmation_id = $('#affirmations_2select').val();
+                if (selected_affirmation_id === '0') {
+                    return
+                }
+                $('#selected_affirmation_id').val(selected_affirmation_id);
+                $('#create_session_form').submit();
+            });
+
+
+        });
+    </script>
+{% endblock %}

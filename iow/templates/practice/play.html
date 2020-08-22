@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% load static custom_tags %}
+{% load bootstrap4 %}
+{% block title %}Your Practice Sessions - Performance Stats{% endblock %}
+
+{% block body_extra_class %}no_padding_top{% endblock %}
+{% block nav_extra_class %}hide_me{% endblock %}
+
+{% block main %}
+    {% if request.user.profile.has_active_subscription %}
+        <style>
+            body {
+                background-color: black;
+            }
+        </style>
+        <div id="play_carousel" class="carousel slide carousel-fade" data-ride="carousel"
+             style="background-color: black; width: 100%;height: 100%; display: flex; align-items: center; justify-content: center">
+            <div class="carousel-inner"
+                 style="position: absolute; width: unset;filter: brightness({{ user_settings.brightness }}%);-webkit-filter: brightness({{ user_settings.brightness }}%);"
+                 id="draggable-caption">
+                {#            {% for i in total_reps %}#}
+                {% for ps_cycle in ps_cycles %}
+                    {% for text_obj in practice.affirmation.ordered_affirmations %}
+                        {% with current_obj=forloop.counter %}
+                            {% if text_obj.repeat %}
+                                <div class="carousel-item">
+                                    {#                    <img class="d-block w-100 play_image_size" src="{{ image.image.url }}" alt="{{ image.id }}">#}
+                                    <div class="carousel-caption d-none d-md-block"
+                                         style="position: unset;color: white;">
+
+                                        <!-- todo: match image to text -->
+                                        <h4 class="noselect font-weight-bold caption_txt_btm slide_text_{{ i }}_{{ forloop.counter }}"
+                                            style="font-size: {{ practice.font_size }}px">
+                                            {% if user_settings.ps_ismantra %}
+                                                {{ text_obj.mantra|linebreaksbr }}
+                                            {% else %}
+                                                {{ text_obj.text|linebreaksbr }}
+                                            {% endif %}
+                                        </h4>
+
+                                    </div>
+                                </div>
+                                {% for rep in text_obj.get_rep_list %}
+                                    {% for text_obj_rep in practice.affirmation.ordered_affirmations %}
+                                        {% if current_obj|subtract:text_obj.cells <= forloop.counter0 and forloop.counter <= current_obj %}
+                                            <div class="carousel-item">
+                                                {#                    <img class="d-block w-100 play_image_size" src="{{ image.image.url }}" alt="{{ image.id }}">#}
+                                                <div class="carousel-caption d-none d-md-block"
+                                                     style="position: unset;color: white;">
+                                                    <!-- todo: match image to text -->
+                                                    <h4 class="noselect font-weight-bold caption_txt_btm slide_text_{{ i }}_{{ forloop.counter }}"
+                                                        style="font-size: {{ practice.font_size }}px">
+                                                        {% if user_settings.ps_ismantra %}
+                                                            {{ text_obj.mantra|linebreaksbr }}
+                                                        {% else %}
+                                                            {{ text_obj.text|linebreaksbr }}
+                                                        {% endif %}
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% else %}
+                                <div class="carousel-item">
+                                    {#                    <img class="d-block w-100 play_image_size" src="{{ image.image.url }}" alt="{{ image.id }}">#}
+                                    <div class="carousel-caption d-none d-md-block"
+                                         style="position: unset;color: white;">
+
+                                        <!-- todo: match image to text -->
+                                        <h4 class="noselect font-weight-bold caption_txt_btm slide_text_{{ i }}_{{ forloop.counter }}"
+                                            style="font-size: {{ user_settings.font_size }}px">
+                                            {% if user_settings.ps_ismantra %}
+                                                {{ text_obj.mantra|linebreaksbr }}
+                                            {% else %}
+                                                {{ text_obj.text|linebreaksbr }}
+                                            {% endif %}
+                                        </h4>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                {% endfor %}
+                <div class="carousel-item"></div>
+            </div>
+
+
+            <div class="carousel-control-prev exit_control hidden">
+                <p class="d-block">
+                    <a href="{% url 'practice_detail' practice.title|slugify practice.id %}?exited_from_play=1">
+                        <button class="btn btn-sm btn-danger mb-2 " type="button">Exit</button>
+                    </a>
+                </p>
+            </div>
+            <div class="carousel-control-prev fullScreen_control hidden">
+                <p class="d-block">
+                    <button class="btn btn-sm btn-primary mb-2 fullscreen_btn" type="button">See in fullscreen</button>
+                </p>
+            </div>
+            <div class="carousel-control-prev slide_control hidden">
+                <p class="d-block">
+                    <button class="btn btn-sm btn-primary mb-2 left_slide_btn" type="button">
+                        <i class="fas fa-chevron-circle-left"></i>
+                    </button>
+                    <button class="btn btn-sm btn-primary mb-2 pause_btn" type="button">
+                        <i class="fa fa-pause-circle fa-2x"></i>
+                    </button>
+                    <button class="btn btn-sm btn-primary mb-2 right_slide_btn" type="button">
+                        <i class="fas fa-chevron-circle-right"></i>
+                    </button>
+                </p>
+            </div>
+            {% if practice.music_file %}
+                <div class="carousel-control-prev audio_control">
+                    <audio controls style="width: 300px!important;" id="audio_play">
+                        <source src="{{ practice.music_file.url }}" type="audio/ogg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="recipe-detail min_height_600">
+            <div class="container">
+                <div class="col-12">
+                    Please subscribe to one of our plan to view this page. <a href="{% url 'profile_subscription' %}">Click
+                    Here</a> to go to the subscription page.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block footer_extra_class %}hide_me{% endblock %}
+{% block copyright_extra_class %}hide_me{% endblock %}
+
+{% block extra_js %}
+    {% if request.user.profile.has_active_subscription %}
+    <script>
+        /* When the openFullscreen() function is executed, open the video in fullscreen.
+        Note that we must include prefixes for different browsers, as they don't support the requestFullscreen method yet */
+        function openFullscreen() {
+            var elem = document.getElementById("play_carousel");
+
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { /* Firefox */
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                elem.msRequestFullscreen();
+            }
+        }
+
+        document.addEventListener('fullscreenchange', exitHandler);
+        document.addEventListener('webkitfullscreenchange', exitHandler);
+        document.addEventListener('mozfullscreenchange', exitHandler);
+        document.addEventListener('MSFullscreenChange', exitHandler);
+
+        function hide_fullscreen_btn() {
+            $(".fullscreen_btn").each(function () {
+                $(this).hide();
+            });
+        }
+
+        function show_fullscreen_btn() {
+            $(".fullscreen_btn").each(function () {
+                $(this).show();
+            });
+        }
+
+        function change_caption_text() {
+
+            {#var number_of_poems = {{ practice.affirmation.ordered_affirmations.count }};#}
+            {##}
+            {#var random_position = Math.floor(Math.random() * number_of_poems) + 1;#}
+            {##}
+            {#// hide all first#}
+            {#$(".caption_txt_btm").each(function () {#}
+            {#    $(this).addClass('hide_me');#}
+            {# });#}
+            {##}
+            {#$('.slide_text_' + random_position).removeClass('hide_me');#}
+        }
+
+        $(function () {
+
+            var carousel = $('.carousel');
+
+            carousel.carousel({
+                'interval': {{ duration_in_secs }},
+                'pause': false,
+                wrap: false
+            });
+
+            // pause it
+            $('.pause_btn').on('click', function () {
+                if ($(this).hasClass('paused')) {
+                    carousel.carousel({
+                        'interval': {{ duration_in_secs }},
+                        'pause': false,
+                        wrap: false
+                    });
+                    $(this).removeClass('paused');
+                    $(this).find('i').removeClass('fa-play-circle').addClass('fa-pause-circle');
+                } else {
+                    carousel.carousel('pause');
+                    $(this).addClass('paused');
+                    $(this).find('i').removeClass('fa-pause-circle').addClass('fa-play-circle');
+                }
+
+            });
+
+            $('.left_slide_btn').on('click', function () {
+                carousel.carousel('prev');
+            });
+            $('.right_slide_btn').on('click', function () {
+                carousel.carousel('next');
+            });
+
+            carousel.on('slide.bs.carousel', function () {
+                change_caption_text();
+            });
+
+            // open in fullscreen
+            $('.fullscreen_btn').on('click', function () {
+                hide_fullscreen_btn();
+                openFullscreen();
+            });
+
+            // Start counting via js
+            var interval = 1000;  // 1000 = 1 second, 3000 = 3 seconds
+            function doAjax() {
+                $.ajax({
+                    type: 'post',
+                    url: '{% url "count_play_session" practice.title|slugify practice.id %}',
+                    data: {
+                        'session_id': {{ practice.id }},
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#hidden').val(data);// first set the value
+                    },
+                    complete: function (data) {
+                        // Schedule the next
+                        setTimeout(doAjax, interval);
+                    }
+                });
+            }
+
+            setTimeout(doAjax, interval);
+
+        });
+
+        function exitHandler() {
+            if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+                show_fullscreen_btn();
+            }
+        }
+
+        $("#draggable-caption").draggable({containment: '#play_carousel'});
+
+
+        var justHidden = false;
+
+        $(document).ready(function () {
+            var j;
+            $(document).mousemove(function () {
+                if (!justHidden) {
+                    justHidden = false;
+                    clearTimeout(j);
+                    $('.carousel-control-prev').removeClass('hidden');
+                    j = setTimeout('hide();', 2000);
+                }
+            });
+        });
+
+        function hide() {
+            $('.carousel-control-prev').addClass('hidden');
+        }
+
+        $('#draggable-caption').children(":first").addClass('active');
+    </script>
+    {% endif %}
+{% endblock %}

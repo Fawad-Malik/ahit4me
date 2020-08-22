@@ -1,0 +1,142 @@
+{% extends extends_template %}
+{% load static custom_tags %}
+{% load bootstrap4 %}
+{% block title %}
+    My Progress - {{ request.user.username|capfirst }}
+{% endblock %}
+
+{% block extra_css %}
+
+    <style>
+        .main-wrapper {
+            background-color: white;
+            padding: 15px !important;
+            color: #3f51b5 !important;
+        }
+
+        .table-header {
+            background-color: white !important;
+            border: 3px solid #3f51b5 !important;
+            border-radius: 10px !important;
+            width: 100% !important;
+        }
+
+        .table-header-tr {
+            color: white !important;
+            background-color: #3f51b5 !important;
+            text-align: center !important;
+        }
+
+        .table-body-name {
+            width: 70% !important;
+            border: 3px solid #3f51b5 !important;
+        }
+
+        .table-body-mint {
+            text-align: center !important;
+            width: 30% !important;
+            border: 3px solid #3f51b5 !important;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+
+    <div class="recipe-detail" xmlns="http://www.w3.org/1999/html">
+        <div class="main-wrapper">
+            {% if not myprogress == 'True' %}
+                <div class="col-lg-12 reduce-padding text-center"
+                     style="margin-top: 10px;display: flex;justify-content: center;">
+                    <div class="col-lg-2 col-12 col-md-4 col">
+                        <select id="yearDropDown" class="form-control"></select>
+                    </div>
+                </div>
+            {% endif %}
+            {% if user_data %}
+                <div class="col-lg-12 text-center">
+                    <h2> Annual Investment Total </h2>
+                </div>
+                <div class="col-12 reduce-padding" style="display: flex;flex-wrap: wrap;">
+                    {% for data in user_data %}
+                        <div class="col-lg-2 col-12 col-sm-4 col-md-3 reduce-padding">
+                            <div class="col-lg-12" style="margin-top: 10px">
+                                <table class="table table-bordered table-header">
+                                    <thead>
+                                    <tr class="table-header-tr">
+                                        <td colspan="2" style="cursor: pointer"
+                                            onclick="openMonthReport('{{ data.month }}')">{{ data.month }}</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody style="font-size: 15px;border: 3px solid #3f51b5;">
+                                    <tr>
+                                        <td class="table-body-name">
+                                            Minutes Invested In
+                                        </td>
+                                        <td class="table-body-mint">
+                                            Accumilated
+                                        </td>
+                                    </tr>
+                                    {% for area in data.areasoflife %}
+                                        <tr>
+                                            <td class="table-body-name">
+                                                {{ area.name }}
+                                            </td>
+                                            <td class="table-body-mint">
+                                                {{ area.minutes }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="col-lg-12 text-center" style="margin-top: 15px">
+                    {{ msg }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <script>
+        var min = 2015,
+            max = new Date().getFullYear(),
+            select = document.getElementById('yearDropDown');
+
+        for (var i = min; i <= max; i++) {
+            var opt = document.createElement('option');
+            opt.value = i;
+            opt.innerHTML = i;
+            select.appendChild(opt);
+        }
+
+        select.value = '{{ year }}';
+        $('#yearDropDown').on('change', function () {
+            if ('{{ is_year }}' == 'True') {
+                window.location = '../' + this.value;
+            } else {
+                window.location = './' + this.value;
+            }
+        });
+
+        function openMonthReport(month) {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+                'November', 'December'];
+
+            const monthIndex = months.indexOf(month) + 1;
+            if ('{{ myprogress }}' != 'True') {
+                if ('{{ is_year }}' == 'True') {
+                    window.location = '../../practice_tracker_monthly/' + monthIndex + '/{{ year }}'
+                } else {
+                    window.location = './../practice_tracker_monthly/' + monthIndex + '/{{ year }}'
+                }
+            } else {
+                window.location = './../practice_tracker_monthly/' + monthIndex + '/{{ year }}'
+            }
+
+        }
+    </script>
+{% endblock %}

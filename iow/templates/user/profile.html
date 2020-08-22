@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block title %}
+    Profile - {{ request.user.username|capfirst }}
+{% endblock %}
+
+{% block main %}
+
+    <div class="recipe-detail">
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-12 text-center">
+                    <h4 style="color: #666666">Your Profile</h4>
+                    <h1>{{ request.user.username|capfirst }}</h1>
+                    <small class="by mb-3 d-inline-block">
+                        Last login: {{ request.user.last_login }}
+                    </small>
+                </div>
+                <div class="col-lg-8">
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active dark_lila_link" href="{% url 'profile' %}">Account</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link dark_lila_link" href="{% url 'profile_subscription' %}">Subscription</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link dark_lila_link" href="{% url 'profile_settings' %}">Settings</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent">
+                        {% include 'user/includes/account.html' %}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

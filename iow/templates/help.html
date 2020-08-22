@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block title %}
+    Ahit4me - Help
+{% endblock %}
+
+{% block main %}
+    <div class="recipe-detail">
+        <div class="container">
+
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-10 text-center">
+                    <h1 class="no_font_weight">Frequently Asked Questions - a.k.a FAQ</h1>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+
+                    <div class="accordion" id="accordionExample">
+
+                        {% for help in helps %}
+                            <div class="card">
+                                <div class="card-header" id="heading{{ help.id }}">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link dark_lila_link cursor_pointer" type="button" data-toggle="collapse"
+                                                data-target="#collapse{{ help.id }}"
+                                                aria-expanded="true" aria-controls="collapse{{ help.id }}">
+                                            {{ help.title|capfirst }}
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapse{{ help.id }}" class="collapse {% if forloop.first %}show{% endif %}"
+                                     aria-labelledby="heading{{ help.id }}"
+                                     data-parent="#accordionExample">
+                                    <p class="card-body">
+                                        {{ help.text|safe|linebreaksbr }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                    <h6 class="mt-3">Still need help? <a href="{% url 'landing_contact' %}" class="orange_link">Drop message.</a></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block title %}
+    Let's capture your thoughts
+{% endblock %}
+{% block main %}
+    {% if request.user.profile.has_active_subscription %}
+        <style>
+            /* The Modal (background) */
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                padding-top: 100px; /* Location of the box */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0, 0, 0); /* Fallback color */
+                background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+            }
+
+            /* Modal Content */
+            .modal-content {
+                position: relative;
+                background-color: #fefefe;
+                margin: auto;
+                padding: 0;
+                border: 1px solid #888;
+                width: 30%;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                -webkit-animation-name: animatetop;
+                -webkit-animation-duration: 0.4s;
+                animation-name: animatetop;
+                animation-duration: 0.4s
+            }
+
+            /* Add Animation */
+            @-webkit-keyframes animatetop {
+                from {
+                    top: -300px;
+                    opacity: 0
+                }
+                to {
+                    top: 0;
+                    opacity: 1
+                }
+            }
+
+            @keyframes animatetop {
+                from {
+                    top: -300px;
+                    opacity: 0
+                }
+                to {
+                    top: 0;
+                    opacity: 1
+                }
+            }
+
+            /* The Close Button */
+            .close {
+                color: white;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            .modal-header {
+                padding: 2px 16px;
+                background-color: #ecbf3b;
+                float: left;
+                color: white;
+                height: 50px;
+            }
+
+            .modal-body {
+                padding: 2px 16px;
+                height: 100px;
+            }
+
+            .modal-footer {
+                padding: 2px 16px;
+                background-color: #5cb85c;
+                float: left;
+                color: white;
+            }
+
+            .text-style {
+                text-align: center;
+                padding-top: 30px;
+                color: #000000;
+                font-size: 17px;
+
+            }
+        </style>
+        <div class="recipe-detail min_height_600">
+            <div class="container">
+                <div class="col-lg-12 pb-2 reduce-padding">
+                    <div class="dashboard-box clearfix" style="padding: 18px 29px 9px 29px;">
+                        <h4 class="font-weight-bold">
+                            {{ cat_name }} {% if sub_cat_name %} - {{ sub_cat_name }} {% endif %}
+                        </h4>
+                    </div>
+                </div>
+                <div class="row text-left">
+                    {% if text_boxes %}
+                        <div class="col-lg-12 reduce-padding text-box-container">
+                            {% for text_box in text_boxes %}
+                                <div class="text-box">
+                                    <span>{{ text_box.text }}</span>
+                                </div>
+                                {% if not forloop.last %}
+                                    <div class="arrow-box">
+                                        <i class="fa fa-arrow-right arrow-text" aria-hidden="true"></i>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if list %}
+                        <div class="col-lg-6 col-sm-12 reduce-padding">
+                            <div class="col-lg-12 reduce-padding">
+                                <!-- The Modal -->
+                                <div id="myModal" class="modal">
+                                    <!-- Modal content -->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2>Warning</h2>
+                                            <span class="close">&times;</span>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="text-style" id="modalPara">You've already selected this answer</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% for x in list %}
+                                    <div style="margin-bottom: 10px" class="dashboard-box clearfix text-left">
+                                        <b>{{ x.question.text }}</b>
+                                        <div id="q_{{ x.question.id }}">
+                                            {% for y in x.db_answers %}
+                                                {% for z in y %}
+                                                    <input
+                                                            style="margin-bottom: 10px"
+                                                            class="form-control"
+                                                            type="text"
+                                                            value="{{ z.text }}"
+                                                            disabled="true"
+                                                    />
+                                                {% endfor %}
+                                            {% endfor %}
+                                            <input
+                                                    id="qqq"
+                                                    onfocus="showAnswers('question_{{ x.question.id }}')"
+                                                    class="form-control"
+                                                    type="text"
+                                                    value=""
+                                            />
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 reduce-padding">
+                            {% for x in list %}
+                                <div
+                                        class="col-lg-12 reduce-padding"
+                                        id="question_{{ x.question.id }}"
+                                        style="display: none;"
+                                >
+                                    <div style="text-align: left">
+                                        {% if x.answers %}
+                                            <table class="table table-bordered"
+                                                   style="background-color: #3f51b5;color: white;border-radius: 7px;">
+                                                <thead>
+                                                <th style="width: 10%"></th>
+                                                <th>Answer</th>
+                                                </thead>
+                                                <tbody>
+                                                {% for y in x.answers %}
+                                                    <tr style="cursor: pointer;"
+                                                            {% if answer_type == 'category' %}
+                                                        onclick="addInput('../../../{{ answer_type }}/answer/{{ y.id }}', '{{ y.text }}', 'q_{{ x.question.id }}', '{{ y.id }}', '{{ x.question.id }}', '{{ x }}' )"
+                                                            {% elif answer_type == 'space' %}
+                                                        onclick="addInput('../../{{ answer_type }}/answer/{{ y.id }}', '{{ y.text }}', 'q_{{ x.question.id }}', '{{ y.id }}', '{{ x.question.id }}', '{{ x }}' )"
+                                                            {% endif %}
+                                                    >
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{{ y.text }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        {% else %}
+                                            No answers found..
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="col-lg-12 reduce-padding">
+                            No questions found!
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="recipe-detail min_height_600">
+            <div class="container">
+                <div class="col-12">
+                    Please subscribe to one of our plan to view this page. <a href="{% url 'profile_subscription' %}">Click
+                    Here</a> to go to the subscription page.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block extra_js %}
+    <script>
+        function showAnswers(x) {
+            var matches = [].slice.call(document.querySelectorAll('[id^=question_]'));
+            for (let i = 0; i < matches.length; i++) {
+                matches[i].style.display = 'none'
+            }
+            let ele = document.getElementById(x);
+            ele.style.display = "block";
+        }
+
+        let data = [];
+
+        function addInput(route, ans_text, q_id, a_id, question_id, x) {
+            const createElement = createInputElements(
+                data = null,
+                q_id,
+                a_id,
+                route,
+                question_id
+            );
+        }
+
+        function showPopup(status, route, res) {
+            if (status == 201) {
+                var modal = document.getElementById("myModal");
+                var modalPara = document.getElementById("modalPara");
+
+                var span = document.getElementsByClassName("close")[0];
+                modalPara.innerHTML = "You've already selected this answer. " +
+                    "<a href=\"" + route + "\"> View Answer";
+
+                modal.style.display = "block";
+
+                span.onclick = function () {
+                    modal.style.display = "none";
+                };
+
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+            } else {
+                $("#q_" + res.question_id).prepend("<input style=\"margin-bottom: 10px\" class=\"form-control\" type=\"text\" value=\"" + res.answer + "\" disabled=\"true\" />");
+                window.location.href = route;
+            }
+        }
+
+        function createInputElements(data, q_id, a_id, route, question_id) {
+            var user_login = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+
+            if (user_login) {
+                $.ajax({
+                    url: location.origin + "/awareness/save/ans",
+                    type: "post",
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                        question: question_id,
+                        answer: a_id,
+                        answer_type: '{{ answer_type }}'
+                    }
+                }).done(function (res) {
+                    var response = JSON.parse(res);
+                    if (response.status === 201) {
+                        showPopup('201', route, response)
+                    } else {
+                        showPopup('200', route, response)
+                    }
+                })
+                    .fail(function (err) {
+                        console.log("Something went wrong. Please try again later", err);
+                    });
+            }
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block title %}
+    Profile - {{ profile.username|capfirst }}
+{% endblock %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block main %}
+
+    <div class="recipe-detail">
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-12 text-center">
+                    <h4>Your Profile</h4>
+                    <h1>{{ request.user.username|capfirst }}</h1>
+                    <small class="by mb-3 d-inline-block">
+                        Last login: {{ request.user.last_login }}
+                    </small>
+                </div>
+                <div class="col-lg-8">
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link dark_lila_link" href="{% url 'profile' %}">Account</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active dark_lila_link" href="{% url 'profile_subscription' %}">Subscription</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link dark_lila_link" href="{% url 'profile_settings' %}">Settings</a>
+                        </li>
+                    </ul>
+
+                    {% if 'payment_success' in request.GET %}
+                        <h5 class="text-success mt-4 text-center">
+                            Your subscription was successful!
+                        </h5>
+                    {% endif %}
+
+                    {% if 'payment_failed' in request.GET %}
+                        <h5 class="text-danger mt-4 text-center">
+                            <strong>{{ request.GET.msg }}</strong><br>
+                            Payment failed. Please make sure, the card balance is positive. <br>
+                            If you think, this should work, please contact us.
+                        </h5>
+                    {% endif %}
+
+                    <div>
+                        {% include 'user/includes/subscription.html' %}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

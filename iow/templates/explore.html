@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% load bootstrap4 %}
+{% block title %}
+    Discover your Horizons more
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+        .container-box {
+            background-color: #30409D;
+            color: white;
+            display: grid;
+            border: 1px solid;
+            border-radius: 10px;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <div class="recipe-detail">
+        <div class="container" style="min-height: 300px;">
+            <div class="row">
+                <div class="col-lg-12 pb-2 reduce-padding" style="display: flex;flex-wrap: wrap">
+                    <div class="col-md-4 reduce-padding">
+                        <div class="col-12 reduce-padding ">
+                            <div class="dashboard-box clearfix" style="padding: 20px 29px 20px 29px;">
+                                <span style="font-size: large">
+                                    Explore Choose What You Want Start Practicing. Practice, Practice, Practice to Strengthen Your Desire
+                                    Practice, Practice, Practice to Create New Habit to Ability. Never stop Practicing You Will Create IT!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-12 reduce-padding" style="margin-top: 10px">
+                            <div class="dashboard-box clearfix" style="padding: 20px 29px 20px 29px;">
+                                <span style="font-size: large">
+                                    PRACTICE is FUN-da-MENTAL When You find out how Fun it is You'll Never Stop the Playful Act of PRACTICE
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-12 col-sm-12 reduce-padding text-center dashboard-box clearfix"
+                         style="padding: 0;height: unset;margin-bottom: 10px;background-color: #e7e7e7"
+                         id="video_display_view"
+                    >
+                        <iframe style="width:100%;height:100%;"
+                                src="https://www.youtube.com/embed/oAbiIcf6FY4?autoplay=1"></iframe>
+                    </div>
+                    <div class="col-lg-12 pb-2 reduce-padding" style="padding: 0;">
+                        <div class="col-lg-12 reduce-padding text-center" style="padding: 0;">
+                            {% if all_categories %}
+                                <div class="col-12 reduce-padding">
+                                    <div class="col-12 reduce-padding" style="display: flex;flex-wrap: wrap">
+                                        <div class="col-2 reduce-padding container-box" style="height: 50px;">
+
+                                        </div>
+                                        <div class="col-4 reduce-padding container-box" style="height: 50px;">
+                                            What Do You Want
+                                        </div>
+                                        <div class="col-4 reduce-padding container-box" style="height: 50px;">
+                                            Purpose of Content
+                                        </div>
+                                        <div class="col-2 reduce-padding container-box" style="height: 50px;">
+                                            Schedule
+                                        </div>
+                                    </div>
+                                </div>
+                                {% for category in all_categories %}
+                                    <div class="col-12 reduce-padding">
+                                        <div class="col-12 reduce-padding" style="display: flex;flex-wrap: wrap">
+                                            <div class="col-2 reduce-padding container-box text-uppercase"
+                                                 style="min-height: 100px;font-size: large;">
+                                                <span>{{ category.name }}</span>
+                                            </div>
+                                            <div class="col-4 reduce-padding container-box"
+                                                 style="background-color: #e7e7e7;line-height: 1.8em;justify-content: unset;padding: 5px">
+                                                {% for dream in category.dreams %}
+                                                    {% if dream.practice_session|is_already_added:request.user %}
+                                                        <span style="color: black;text-align: left;"
+                                                              class="on_hover_underline cursor_pointer"
+                                                              onclick="openURL('{{ dream.practice_session.get_absolute_url }}')">
+                                                            {{ forloop.counter }}. {{ dream.dream }}<br>
+                                                        </span>
+                                                    {% elif not profile.can_have_more_sessions %}
+                                                        <span style="color: black;text-align: left;"
+                                                              class="on_hover_underline cursor_pointer"
+                                                              onclick="openURL('{% url 'profile_subscription' %}')">
+                                                            {{ forloop.counter }}. {{ dream.dream }}<br>
+                                                        </span>
+                                                    {% else %}
+                                                        <span style="color: black;text-align: left;"
+                                                              class="on_hover_underline cursor_pointer"
+                                                              onclick="addToPack('{{ dream.practice_session.id }}', '{{ dream.practice_session.get_absolute_url }}')">
+                                                            {{ forloop.counter }}. {{ dream.dream }}<br>
+                                                        </span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="col-4 reduce-padding container-box"
+                                                 style="background-color: #e7e7e7;line-height: 1.8em;padding: 5px">
+                                                {% for dream in category.dreams %}
+                                                    <span style="color: black">{{ dream.practice_session.purpose }}<br></span>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="col-2 reduce-padding container-box"
+                                                 style="background-color: #e7e7e7;line-height: 1.8em;padding: 5px">
+                                                {% for dream in category.dreams %}
+                                                    <span style="color: black">Minutes-Times of Day<br></span>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                {#                            <div class="table-responsive ">#}
+                                {#                                <table class="table table-bordered table-condensed">#}
+                                {#                                    <thead>#}
+                                {#                                    <tr style="background-color: #30409D; color: white;">#}
+                                {#                                        <th style="text-align: center" scope="col"></th>#}
+                                {#                                        <th style="text-align: center" scope="col">Dream</th>#}
+                                {#                                        <th style="text-align: center" scope="col">Plan of Positive Habits of Ability#}
+                                {#                                        </th>#}
+                                {#                                        <th style="text-align: center" scope="col">Schedule</th>#}
+                                {#                                    </tr>#}
+                                {#                                    </thead>#}
+                                {#                                    {% for category in all_categories %}#}
+                                {#                                        <tbody style="color: white; font-size: 15px;border: unset">#}
+                                {#                                        {% for dream in category.dreams %}#}
+                                {#                                            <tr>#}
+                                {#                                                {% if forloop.first %}#}
+                                {#                                                    <td style="background-color: #30409D; color: white;text-align: center"#}
+                                {#                                                        scope="col"#}
+                                {#                                                        rowspan="4" class="align-middle">{{ category.name }}#}
+                                {#                                                    </td>#}
+                                {#                                                {% endif %}#}
+                                {##}
+                                {#                                                <td style="text-align: left;padding: 0.1rem 0.2rem;color: black; border: 1px solid black;"#}
+                                {#                                                    scope="col">{{ forloop.counter }}. {{ dream.dream }}#}
+                                {#                                                </td>#}
+                                {#                                                <td style="text-align: center;padding: 0.1rem 0.2rem;color: black; border: 1px solid black;"#}
+                                {#                                                    scope="col">#}
+                                {#                                                    {% if dream.practice_session|is_already_added:request.user %}#}
+                                {#                                                        <div class="col-12 reduce-padding cursor_pointer add_to_pack_btn on_hover_underline"#}
+                                {#                                                             style="text-overflow: ellipsis; overflow: hidden;height: 2em; white-space: nowrap;"#}
+                                {#                                                             onclick="openURL('{{ dream.practice_session.get_absolute_url }}')"#}
+                                {#                                                        >#}
+                                {#                                                            Program to Create#}
+                                {#                                                        </div>#}
+                                {#                                                    {% elif not profile.can_have_more_sessions %}#}
+                                {#                                                        <div class="col-12 reduce-padding cursor_pointer add_to_pack_btn on_hover_underline"#}
+                                {#                                                             style="text-overflow: ellipsis; overflow: hidden;height: 2em; white-space: nowrap;"#}
+                                {#                                                             onclick="showError('Please subscribe')"#}
+                                {#                                                        >#}
+                                {#                                                            Program to Create#}
+                                {#                                                        </div>#}
+                                {#                                                    {% else %}#}
+                                {#                                                        <div class="col-12 reduce-padding cursor_pointer add_to_pack_btn on_hover_underline"#}
+                                {#                                                             style="text-overflow: ellipsis; overflow: hidden;height: 2em; white-space: nowrap;"#}
+                                {#                                                             onclick="addToPack('{{ dream.practice_session.id }}', '{{ dream.practice_session.get_absolute_url }}')"#}
+                                {#                                                        >#}
+                                {#                                                            Program to Create#}
+                                {#                                                        </div>#}
+                                {#                                                    {% endif %}#}
+                                {#                                                </td>#}
+                                {#                                                <td style="text-align: center;padding: 0.1rem 0.2rem;color: black; border: 1px solid black;"#}
+                                {#                                                    scope="col">Times of Day#}
+                                {#                                                </td>#}
+                                {#                                            </tr>#}
+                                {#                                        {% endfor %}#}
+                                {#                                        </tbody>#}
+                                {#                                    {% endfor %}#}
+                                {#                                </table>#}
+                                {#                            </div>#}
+                            {% else %}
+                                Sorry, no areas of life are available yet...
+                            {% endif %}
+                        </div>
+                    </div>
+    {#                <div class="col-lg-12 pb-2 reduce-padding">#}
+    {#                    <div class="dashboard-box clearfix" style="padding: 5px 29px 5px 29px;">#}
+    {#                        <span style="font-size: small">#}
+    {#                            When You create enough Desire it will be the force that propels You to Create Your Dreams Powerful Truth to Understand & Use in Your Life#}
+    {#                        </span>#}
+    {#                    </div>#}
+    {#                </div>#}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <script>
+        function addToPack(session_id, url) {
+            var user_login = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+            if (!user_login) {
+                window.location.assign('/user/login/?next={{ request.path }}');
+            } else {
+                $.ajax({
+                    url: location.origin + '/practice/discover/packs/',
+                    type: 'post',
+                    data: {
+                        'session_id': session_id,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function () {
+                        window.location.href = url;
+                    },
+                    error: function () {
+                        alert('Something went wrong. Please try again later');
+                    }
+                })
+            }
+        }
+
+        function openURL(url) {
+            window.location.href = url;
+        }
+    </script>
+{% endblock %}

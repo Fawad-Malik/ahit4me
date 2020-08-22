@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block title %}
+    My Packs - I program my nervous system with what I want in my life
+{% endblock %}
+
+{% block main %}
+    <div class="recipe-detail">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-12 text-center">
+{#                    <h1 class="no_font_weight">#}
+{#                        Home#}
+{#                    </h1>#}
+                    <h5 class="no_font_weight thin_text">
+                        {{ page_text.text|capfirst|linebreaksbr }}
+                    </h5>
+                </div>
+            </div>
+            <div class="row">
+                {% if not categories_in_use %}
+                    <div class="col-lg-12" style="margin-bottom: 150px!important;">
+                        <h3 class="text-center">
+                            You don't have any pack yet.
+                            Start adding Sessions from <a href="{% url 'discover' %}" class="dark_lila_link">Discover page</a>.
+                        </h3>
+                    </div>
+                {% endif %}
+
+                {% for cat in categories_in_use %}
+
+                    {% if cat.practice_sessions %}
+
+                        <div class="col-lg-12 {% if not forloop.first %}pt-6{% endif %}">
+                            <h2 class="thin_text">{{ cat.name|capfirst }}</h2>
+                        </div>
+
+                        {% for ps in cat.practice_sessions %}
+
+                            {% if ps.id in practice_session_ids %}
+                                <div class="col-lg-4 pb-4">
+                                    <a href="{% url 'practice_detail' ps.affirmation.title|slugify ps.id %}"
+                                       class="link_no_underline">
+                                        <div class="box clearfix">
+                                            <h4 class="pb-4 font-weight-bold">
+                                                {{ ps.affirmation.title }}
+                                            </h4>
+                                            <p>
+                                                {{ ps.affirmation.affirmation_texts.count }} Affirmations <br>
+                                                {{ ps.affirmation.category.name }}, {{ ps.affirmation.subcategory.name }}
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                        {% endfor %}
+                        <div class="col-lg-4 pb-4">
+                            <a href="{% url 'discover' %}" class="link_no_underline">
+                                <div class="box add_box clearfix">
+                                    <h2 class="pb-4">
+                                        <i class="fal fa-plus-circle"></i> &nbsp; Add more
+                                    </h2>
+                                </div>
+                            </a>
+                        </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade affirmations_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add your affirmations</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-lg-12">
+
+                            <select class="form-control" id="all_categories_2select" title="all_categories_2select">
+                                <option value="0">Select Category</option>
+                                {% for cat in all_categories %}
+                                    <option value="{{ cat.id }}">{{ cat.name|capfirst }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <select class="form-control mt-4 hide_me" id="sub_categories_2select"
+                                    title="sub_categories_2select">
+                                <option value="0">Select Subcategory</option>
+                            </select>
+
+                            <select class="form-control mt-4 hide_me" id="affirmations_2select"
+                                    title="affirmations_2select">
+                                <option value="0">Select Affirmation</option>
+                            </select>
+
+                            <p class="mt-5 hide_me">
+                                <button class="btn btn-info btn-xsm">Back to selection</button>
+                            </p>
+
+                            <div id="chosen_affirmation_text" class="mt-3"></div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <form method="post" id="create_session_form">
+                            {% csrf_token %}
+                            <input name="affirmation" title="affirmation" id="selected_affirmation_id" class="hide_me">
+                        </form>
+                        <button type="submit" class="btn btn-primary hide_me add_button">Add selected affirmations
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

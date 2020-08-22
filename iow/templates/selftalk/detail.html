@@ -1,0 +1,1508 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% load static custom_tags %}
+{% block extra_css %}
+    
+<link href="{% static 'css/chronoline.min.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/snackbar.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/core-pages.css' %}"/>
+<style>
+.bg-circles {
+    background: radial-gradient(#4f5cf9, #4f5cf9 20%, #4051f9 20%, #4051f9 45%, #3349f9 45%, #3349f9 63%, #3347f0 63%, #3347f0 70%, #0033f8 70%, #0033f8);
+}
+.oval-lg {
+    height: 4rem;
+    width: 10.4rem;
+    line-height: 1;
+    background-color: rgb(106,248,61);
+    border-radius: 50%;
+    font-size:16px;
+    color:rgb(0,0,0);
+    margin:0 auto !important;
+    text-transform:uppercase;
+}    
+.oval-sm {
+    display:inline-block;
+    height: 2rem;
+    width: 3.2rem;
+    font-size:15px;
+    background-color: rgb(106,248,61);
+    border-radius: 50%;
+    color:rgb(0,0,0);
+}
+.color-blue{
+    color:rgb(0, 46, 248) !important;
+}
+.font-7{
+    font-size:0.7rem;
+}
+.border-1{
+    border:1px solid black;
+}
+.br-2{
+border-right:2px solid black;
+}
+.bl-2{
+border-left:2px solid black;
+}
+.bt-2{
+border-top:2px solid black;
+}
+.bb-2{
+border-bottom:2px solid black;
+}
+.font-6{
+    font-size:0.6rem;
+}
+.font-9{
+    font-size:0.9rem;
+}
+.font-bold{
+    font-weight:bold;
+}
+.border-bottom-1{
+    border-bottom:1px solid black;
+}
+.color-gray{
+    color:rgb(108,108,108);
+}
+.color-black{
+    color:rgb(69,69,69);
+}
+.border-white{
+    border-right:2px solid rgb(241,242,254);
+    border-bottom:1px solid rgb(241,242,254);
+}
+.bg-white{
+    background-color:rgb(255,255,255);
+}
+.bg-yellow{
+    background-color:rgb(255,252,68);
+}
+.text-gray{
+    color:rgb(203,203,203);
+}
+.cursor-pointer{
+    cursor:pointer;
+}
+.border-2{
+    border:2px solid black !important;
+    border-radius: 5px !important;
+    font-weight:bold;
+}
+.height-50{
+    min-height: 50%;
+}
+span{
+    display:inline-block;
+}
+.increasefont::first-letter {
+  font-size: 32px;
+}
+table{
+    border-collapse:collapse;
+}
+select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none; 
+    background: none;
+}
+.min-height-20{
+    min-height:20px;
+}
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+</style>
+{% endblock %}
+{% block title %}
+    Knowledge & Techniques
+{% endblock %}
+
+{% block main %}
+    <section id="header" style="margin-top:2.5rem;">
+        <div>
+            <div class="container-fluid reduce-padding">
+                <div class="row bg-blue text-white">
+                    <div class="col-lg-3 col-md-3 col-sm-none col-none reduce-padding justify-content-left">
+                        <div class="clearfix text-align-left" style="font-size:1.2em !important; font-weight:bold; padding-left:3rem; padding-top:1rem;">
+                            <p>
+                                Dream it Everyday<br>&nbsp;&nbsp;with Passion & <br>You Will Create it
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 reduce-padding">
+                        <div style="padding-top:2.3rem; text-align:center;">
+                            <h2 style="font-size:1.8rem !important;">
+                                3 Steps 2 Accelerate Awareness
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-none col-none reduce-padding" >
+                        <div class="text-align-right clearfix" style="font-size:1.2em !important; font-weight:bold; text-align:right; justify-content:center;padding-right:3rem; padding-top:1rem;">
+                            <p>
+                                Your Imagination <br>Is the Muscle &nbsp;&nbsp; &nbsp;<br>of Your Mind &nbsp;&nbsp; &nbsp;
+                            <p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="header2" style="margin-top:0.5rem;">
+        <div class="container-fluid reduce-padding">
+            <div class="row">
+                <div class="col-lg-6 col-sm-12 col-md-6 col-12" style="padding-left:0px; padding-right:0.2rem;">
+                    <a href="#"
+                        class="link_no_underline">
+                        <div class="dashboard-box clearfix no-padding">
+                            <h3 class="heading">
+                                1 -Identify Self Talk Habits into the 3 Areas of Life
+                            </h3>
+                            
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-lg-6 col-sm-12 col-md-6 col-12" style="padding-right:0px; padding-left:0.2rem;">
+                    <a href="#"
+                        class="link_no_underline">
+                        <div class="dashboard-box clearfix no-padding">
+                            <h3 class="heading">
+                                2- Access & Measure the Self Talk Habits
+                            </h3>
+                            
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="header3" style="margin-top:0.5rem;">
+        <div class="container-fluid reduce-padding">
+            <div class="row">
+                <div class="col-md-6" style="width:100% !important; padding:0 !important;">
+                    <div class="about-text-center">
+                        <!-- title -->
+                        <div class="row">
+                            {% for sub in subCategoriesList1 %}
+                                <div class="col-md-4 text-center" style="min-height:14rem;padding-top:0rem !important;padding-bottom:0.3rem !important;padding-left:0rem !important;padding-right:0.3rem;">
+                                    <div class="border-1 sm-padding dashboard-box">
+                                        <div class="oval-lg sm-padding flex-wrap flex-center" style="margin-top:20px !important;">
+                                            Self Talk Habits <br>ABOUT<br> {{ sub.subcategory }}
+                                        </div>
+                                        <div class="flex-wrap flex-center">
+                                        {% for selftalk in sub.selftalks|slice:":9" %}
+                                            <div class="oval-sm sm-padding cursor-pointer want-spinner" style="float:left;" onclick="get_seltalks('{{selftalk.id}}','{{selftalk.name}}','{{selftalk.low_low}}','{{selftalk.low_high}}','{{selftalk.low_medium}}','{{selftalk.high_low}}','{{selftalk.high_high}}','{{selftalk.high_medium}}','{{selftalk.medium_low}}','{{selftalk.medium_high}}','{{selftalk.medium_medium}}','{{selftalk.polarity_self_talk}}','{{selftalk.function_self_talk}}','{{selftalk.emotion_self_talk}}')">
+                                            ST {{ forloop.counter }}
+                                            </div>
+                                        {% endfor %}
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-12 col-sm-12 no-padding">
+                    <div class="col-12 no-padding flex-wrap">
+                        <div class="d-flex col-md-4 text-center sm-reduce-padding">
+                            <div class="col-12 no-padding" style="color:white;">
+                                <div class="col-12 flex-wrap no-padding" style="height:3rem;">
+                                    <div class="col-md-8 border-1 dashboard-box no-padding flex-wrap flex-center">
+                                        Fundamentals Displayed
+                                    </div>
+                                    <div class="col-md-4 border-1 bg-green no-padding flex-wrap flex-center">
+                                        Display Less
+                                    </div>
+                                </div>
+                                <div class="col-12 flex-wrap no-padding border-1">
+                                    <div class="col-4 text-center border-right no-padding">
+                                        <div class="col-12 flex-wrap no-padding">
+                                            <div class="col-12 text-center no-padding bg-blue text-white">
+                                                Polarity
+                                            </div>
+                                            <div class="col-12 text-center no-padding bg-white text-black" style="font-size: 15px;">
+                                                <select class="form-control custom-input bg-white" id="polarity" onChange="saveFundamentals()">
+                                                    {% if userst_first %}
+                                                        <option {% if userst_first.polarity == 'Positive' %} selected="selected"{% endif %} value="Positive">Positive</option>
+                                                        <option {% if userst_first.polarity == 'Neutral' %} selected="selected"{% endif %} value="Neutral">Neutral</option>
+                                                        <option {% if userst_first.polarity == 'Negative' %} selected="selected"{% endif %} value="Negative">Negative</option>
+                                                    {% else %}
+                                                        <option value="Positive">Positive</option>
+                                                        <option value="Neutral">Neutral</option>
+                                                        <option value="Negative">Negative</option>
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-center border-right no-padding">
+                                        <div class="col-12 flex-wrap no-padding">
+                                            <div class="col-12 text-center no-padding bg-blue text-white">
+                                                Function
+                                            </div>
+                                            <div class="col-12 text-center no-padding bg-white text-black" style="font-size: 15px;">
+                                                <select class="form-control custom-input bg-white" id="function" onChange="saveFundamentals()">
+                                                    {% if userst_first %}
+                                                        <option {% if userst_first.function == 'Yes' %} selected="selected"{% endif %} value="Yes">Yes</option>
+                                                        <option {% if userst_first.function == 'No' %} selected="selected"{% endif %} value="No">No</option>
+                                                    {% else %}
+                                                        <option value="Yes">Yes</option>
+                                                        <option value="No">No</option>
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-center no-padding">
+                                        <div class="col-12 flex-wrap no-padding">
+                                            <div class="col-12 text-center no-padding bg-blue text-white">
+                                                Emotion
+                                            </div>
+                                            <div class="col-12 text-center no-padding bg-white text-black" style="font-size: 15px;">
+                                                <select class="form-control custom-input bg-white" id="emotion" onChange="saveFundamentals()">
+                                                    {% if userst_first %}
+                                                        <option {% if userst_first.emotion == 'Positive' %} selected="selected"{% endif %} value="Positive">Positive</option>
+                                                        <option {% if userst_first.emotion == 'Neutral' %} selected="selected"{% endif %} value="Neutral">Neutral</option>
+                                                        <option {% if userst_first.emotion == 'Negative' %} selected="selected"{% endif %} value="Negative">Negative</option>
+                                                    {% else %}
+                                                        <option value="Positive">Positive</option>
+                                                        <option value="Neutral">Neutral</option>
+                                                        <option value="Negative">Negative</option>
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-12 text-center bg-blue no-padding">
+                                    Current Micro Effects During Thought
+                                </div>
+                                
+                                <div class="col-12 flex-wrap no-padding border-1">
+                                    <div class="col-4 no-padding border-right">
+                                        <div class="col-12 bg-green no-padding border-bottom-1 height-50">
+                                            Polarity
+                                        </div>
+
+                                        <div class="col-12 text-center no-padding bg-white text-black min-height-20" style="font-size:15px;" id="polarity_div">
+                                            {{ subCategoriesList1.0.selftalks.0.polarity_self_talk }}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-8 no-padding bg-white text-black" style="font-size:15px;" id="polarity_self_talk">
+                                        {{ subCategoriesList1.0.selftalks.0.polarity_self_talk }}
+                                    </div>
+                                </div>
+                                <div class="col-12 flex-wrap no-padding border-1">
+                                    <div class="col-4 no-padding border-right">
+                                        <div class="col-12 bg-green no-padding border-bottom-1 height-50">
+                                            Function
+                                        </div>
+
+                                        <div class="col-12 text-center no-padding bg-white text-black min-height-20" style="font-size:15px;" id="function_div">
+                                            {{ subCategoriesList1.0.selftalks.0.function_self_talk }}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-8 no-padding bg-white text-black" style="font-size:15px;" id="function_self_talk">
+                                        {{ subCategoriesList1.0.selftalks.0.function_self_talk }} 
+                                    </div>
+                                </div>
+                                <div class="col-12 flex-wrap no-padding border-1">
+                                    <div class="col-4 no-padding border-right">
+                                        <div class="col-12 bg-green no-padding border-bottom-1 height-50">
+                                            Emotion
+                                        </div>
+
+                                        <div class="col-12 text-center no-padding bg-white text-black min-height-20" style="font-size:15px;" id="emotion_div">
+                                            {{ subCategoriesList1.0.selftalks.0.emotion_self_talk }}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-8 no-padding bg-white text-black" style="font-size:15px;" id="emotion_self_talk">
+                                        {{ subCategoriesList1.0.selftalks.0.emotion_self_talk }}
+                                    </div>
+                                </div>
+                                                                
+                            </div>
+                        </div>
+                        <div class="d-flex col-md-4 text-center sm-reduce-padding">
+                            <div class="col-12 no-padding" style="color:white;">
+                                <div class="row" style="padding:0px !important; height:3rem;">
+                                    <div class="col-md-8 border-1 flex-wrap flex-center" style="padding:0px;background-color:rgb(0, 46, 248) !important; font-size:0.9rem; border-radius:0.3rem;width:80%;color:white;">
+                                        Measurement Displayed
+                                    </div>
+                                    <div class="col-md-4 border-1 flex-wrap flex-center" style="color:black;padding;0px;background-color:rgb(106,248,61) !important;  font-size:0.9rem;border-radius:0.3rem;width:20%;">
+                                        Display Less
+                                    </div>
+                                </div>
+                                <div class="row border-1 no-padding">
+                                    <div class="col-4 text-center border-right no-padding">
+                                        <div class="row">
+                                            <div class="col-12 text-center no-padding bg-blue text-white" style="font-size:15px;">
+                                                Times a day
+                                            </div>
+                                            <div class="col-12 text-center no-padding bg-white text-black font-7 text-black" onChange="calculations()">
+                                                <select class="form-control custom-input bg-white" id="timesaday" onChange="saveFundamentals()"> 
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-center border-right no-padding">
+                                        <div class="row">
+                                            <div class="col-12 text-center no-padding bg-blue text-white" style="font-size:15px;">
+                                                Times it last
+                                            </div>
+                                            <div class="col-12 text-center no-padding bg-white text-black font-7 text-black" onChange="calculations()">
+                                                <select class="form-control custom-input bg-white" onChange="saveFundamentals()" id="timeitlast">
+                                                    <option value="0.5">30s or less</option>
+                                                    <option value="1">30s to a min</option>
+                                                    <option value="3">1-3 mins</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-center no-padding">
+                                        <div class="row">
+                                            <div class="col-12 text-center no-padding bg-blue text-white" style="font-size:15px;">
+                                                How intense
+                                            </div>
+                                            <div class="col-12 text-center no-padding bg-white text-black font-7 text-black">
+                                                <select class="form-control custom-input bg-white" id="howintense" onChange="saveFundamentals()">
+                                                    <option value="high">High</option>
+                                                    <option value="medium">Medium</option>
+                                                    <option value="low">Low</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row border-1 no-padding">
+                                    <div class="col-4 text-center border-right no-padding">
+                                        <div class="row">
+                                            <div class="col-12 text-center no-padding bg-blue text-white">
+                                                Day
+                                            </div>
+                                            <div class="col-12 text-center no-padding bg-white text-black text-black min-height-20" id="day" style="overflow:hidden;">
+                                                
+                                            </div>
+                                            <div class="col-12 d-flex no-padding bg-blue cursor-pointer">
+                                                <div class="col-6 no-padding border-right" id="daymins">
+                                                    Mins
+                                                </div>
+                                                <div class="col-6 no-padding" id="dayhrs">
+                                                    Hrs
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-center border-right no-padding">
+                                        <div class="row">
+                                            <div class="col-12 text-center no-padding bg-blue text-white">
+                                                Wk
+                                            </div>
+                                            <div class="col-12 text-center no-padding bg-white text-black min-height-20" id="week" style="overflow:hidden;">
+                                                
+                                            </div>
+                                            <div class="col-12 d-flex no-padding bg-blue cursor-pointer">
+                                                <div class="col-6 no-padding border-right" id="wkmins">
+                                                    Mins
+                                                </div>
+                                                <div class="col-6 no-padding" id="wkhrs">
+                                                    Hrs
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-center border-right no-padding">
+                                        <div class="row">
+                                            <div class="col-12 text-center no-padding bg-blue text-white">
+                                                Mth
+                                            </div>
+                                            <div class="col-12 text-center no-padding bg-white text-black min-height-20" id="month" style="overflow:hidden;">
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-12 d-flex no-padding bg-blue cursor-pointer">
+                                            <div class="col-6 no-padding border-right" id="mthhrs">
+                                                Hrs
+                                            </div>
+                                            <div class="col-6 no-padding" id="mthdays">
+                                                dys
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row border-1" style="padding:0px !important;width:100%;">
+                                    <div class="col-4 text-center border-right no-padding">
+                                        <div class="row">
+                                            <div class="col-12 text-center no-padding bg-blue text-white">
+                                                3 Mth
+                                            </div>
+                                            <div class="col-12 text-center no-padding bg-white text-black border-right min-height-20" id="3month" style="overflow:hidden;">
+                                                
+                                            </div>
+                                            <div class="col-12 d-flex no-padding bg-blue cursor-pointer">
+                                                <div class="col-6 no-padding border-right" id="3mthdays">
+                                                    Dys
+                                                </div>
+                                                <div class="col-6 no-padding" id="3mthwks">
+                                                    Wks
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-center border-right no-padding">
+                                        <div class="row">
+                                            <div class="col-12 text-center no-padding bg-blue text-white">
+                                                Year
+                                            </div>
+                                            <div class="col-12 text-center no-padding bg-white text-black min-height-20" id="year" style="overflow:hidden;">
+                                                
+                                            </div>
+                                            <div class="col-12 d-flex no-padding bg-blue cursor-pointer">
+                                                <div class="col-6 no-padding border-right" id="yearhrs">
+                                                    Hrs
+                                                </div>
+                                                <div class="col-6 no-padding" id="yeardays">
+                                                    Days
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-center no-padding">
+                                        <div class="row">
+                                            <div class="col-12 text-center no-padding bg-blue text-white">
+                                                10 Yr
+                                            </div>
+                                            <div class="col-12 text-center no-padding bg-white text-black min-height-20" id="10year" style="overflow:hidden;">
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-12 d-flex no-padding bg-blue cursor-pointer">
+                                            <div class="col-6 no-padding border-right" id="10yearhrs">
+                                                Hrs
+                                            </div>
+                                            <div class="col-6 no-padding" id="10yeardays">
+                                                Days
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row border-1">
+                                    <div class="col-12 text-center flex-wrap bg-blue no-padding font-9">
+                                        Macro Effects of Thought Habit(s) over Time
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4 no-padding border-1 cursor-pointer" style="font-size:14px;" id="x25">
+                                        <div class="col-12 text-center flex-wrap flex-center bg-blue no-padding">
+                                            Display this option
+                                        </div>
+                                        <div class="col-12 text-center flex-wrap flex-center color-gray font-bold bg-white">
+                                            x25 Habits
+                                        </div>
+                                    </div>
+                                    <div class="col-4 no-padding border-1 cursor-pointer" style="font-size:14px;" id="x50">
+                                        <div class="col-12 text-center flex-wrap flex-center bg-blue no-padding">
+                                            Display this option
+                                        </div>
+                                        <div class="col-12 text-center flex-wrap flex-center color-gray font-bold bg-white">
+                                            x50 Habits
+                                        </div>
+                                    </div>
+                                    <div class="col-4 no-padding border-1 cursor-pointer" style="font-size:14px;" id="x100">
+                                        <div class="col-12 text-center flex-wrap flex-center bg-blue no-padding">
+                                            Display this option
+                                        </div>
+                                        <div class="col-12 text-center flex-wrap flex-center color-gray font-bold bg-white">
+                                            x100 Habits
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                
+                            </div>
+                        </div>
+                        <div class="d-flex col-md-4 text-center sm-reduce-padding">
+                            <div class="col-12 no-padding" style="color:white;">
+                                <div class="row" style="padding:0px !important; height:4rem;">
+                                    <div class="col-md-8 border-1 flex-wrap flex-center bg-blue sm-padding" style="">
+                                        Awareness Displayed
+                                    </div>
+                                    <div class="col-md-4 border-1 flex-wrap flex-center" style="color:black;padding;0px;background-color:rgb(106,248,61) !important;  font-size:0.9rem;border-radius:0.3rem;width:20%;">
+                                        Display Less
+                                    </div>
+                                </div>
+                                <div class="row border-1" style="padding:0px !important;width:100%;">
+                                    <div class="row border-bottom-1 no-padding" style="width:100%;">
+                                        <div class="col-md-4 flex-wrap flex-center border-right bg-yellow" style="padding;0px; color:black;min-height:41px;">
+                                            Thought
+                                        </div>
+                                        <div class="col-md-8 flex-wrap flex-center text-black bg-white no-padding" style="font-size:15px;" id="thought_selftalk_name">
+                                            {{ subCategoriesList1.0.selftalks.0.name }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4 text-center border-right" style="padding:0px !important;">
+                                            <div class="row">
+                                                <div class="col-12 text-center no-padding bg-blue text-white">
+                                                    After
+                                                </div>
+                                                <div class="col-12 text-center no-padding font-6">
+                                                    <select class="form-control custom-input bg-white text-black" id="after" onChange="saveFundamentals()">
+                                                        <option>No</option>
+                                                        <option>Mins</option>
+                                                        <option>Hours</option>
+                                                        <option>Days</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 text-center border-right" style="padding:0px !important;">
+                                            <div class="row">
+                                                <div class="col-12 text-center no-padding bg-blue text-white">
+                                                    During
+                                                </div>
+                                                <div class="col-12 text-center no-padding font-6">
+                                                    <select class="form-control custom-input bg-white text-black" id="during" onChange="saveFundamentals()">
+                                                        <option>Yes</option>
+                                                        <option>No</option>
+                                                    </select>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-4 text-center" style="padding:0px !important;">
+                                            <div class="row">
+                                                <div class="col-12 text-center no-padding bg-blue text-white">
+                                                    Before
+                                                </div>
+                                                <div class="col-12 text-center no-padding font-6">
+                                                    <select class="form-control custom-input bg-white text-black" id="before" onChange="saveFundamentals()">
+                                                        <option>Yes</option>
+                                                        <option>No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="bg-blue font-9 border-1" style="">
+                                    <div class="row border-bottom-1">
+                                        <div class="col-12 no-padding">
+                                        Keep or Change this Thought Habit
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 flex-wrap text-center no-padding">
+                                            <div class="row no-padding">
+                                                <div class="col-12 no-padding">
+                                                    Who am I talking to in this Thought?
+                                                </div>
+                                                <div class="col-12" style="position:relative;">
+                                                    <div class="row" style="position:absolute;bottom:0;left:0;right:4px;">
+                                                        <div class="col-12 bg-white color-black no-padding" style="font-size:14px">
+                                                            <select class="form-control custom-input bg-white" id="who_am_i_talking" onChange="saveFundamentals()">
+                                                                <option value="Friends">Friends</option>
+                                                                <option value="Family">Family</option>
+                                                                <option value="Social Figure">Social Figure</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 flex-wrap text-center no-padding">
+                                            <div class="row no-padding">
+                                                <div class="col-12 no-padding" style="min-height:127px;">
+                                                    Is Now a Good Time to talk to this person in My Head?
+                                                </div>
+                                                <div class="col-12" style="position:relative;">
+                                                    <div class="row" style="position:absolute;bottom:0;right:0;">
+                                                        <div class="col-12 bg-white color-black font-7 no-padding" style="font-size:14px">
+                                                            <select class="form-control custom-input bg-white" id="is_now_a_good_time" onChange="saveFundamentals()">
+                                                                <option value="Yes">If Preparing:  Yes</option>
+                                                                <option value="No">If Mindless:  No</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row bg-blue" style="border-radius:1rem;">
+                        <div class="col-7" style="margin:auto;height:10.3rem;padding-top:4rem;color:rgb(136,136,136);">
+                            <div class="row" style="height:2rem;">
+                                <div class="col-4 flex-wrap text-center border-right color-black" style="background-color:rgb(255,252,68); padding-top:0.3rem;border-top-left-radius:0.3rem;border-bottom-left-radius:0.3rem;">
+                                    Self Talk 
+                                </div>
+                                <div class="col-8 flex-wrap text-center color-black" style="background-color:rgb(255,255,255); padding-top:0.3rem;border-top-right-radius:0.3rem;border-bottom-right-radius:0.3rem;" id="selftalkname">
+                                    {{ subCategoriesList1.0.selftalks.0.name }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="header4" style="margin-top:0.5rem;">
+        <div class="row">
+            <div class="col-md-6" style="width:100% !important; padding:0 !important;">
+                {% block awareness-main %}
+                    {% if request.user.profile.has_active_subscription %}
+                        <div class="container-fluid reduce-padding" style="padding-right:0.2rem;">
+                            <div class="row">
+                                <div class="col-lg-12 no-padding">
+                                    <div class="col-lg-12 text-center d-flex bg-blue border-white" style="padding: 0; border-radius:0.5rem;color:white;">
+                                        <div class="col-3">
+                                        9 <br> Sub Areas
+                                        </div>
+                                        <div class="col-6" style="display: flex;align-items: center;justify-content: center;height: 42px; font-size: 32px !important;">
+                                            The 3 Areas of Life
+                                        </div>
+                                        <div class="col-3">
+                                        3 Outer<br> Habits-at
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 text-center bg-circles" style="padding:0;background-color:rgb(0,46,248);">
+                                        <div class="row" style="max-width:1140px !important;margin-left:0px;margin-right:-4px;">
+                                                {% for x in categories %}
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 border-white" style="padding-top:8px;font-size:1.5rem;color:white;height:56px !important; width:376px !important;">{{ x.category }}</div>
+                                                {% endfor %}
+                                        </div>
+                                        {% for sub in subCategories %}
+                                        <div class="row" style="max-width:1136px !important;margin-left:0px;margin-right:-4px;">
+                                            {% for item in sub.row %}
+                                                {% if item %}
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 border-white" style="padding-top:10px;font-size:20px;color:white; height:56px !important; width:376px !important;float: left; width: 100%;cursor: pointer;"
+                                                        onclick="openCategory('../causalforces/{{ item.cat }}/{{ item.sub_cat }}')">
+                                                        {{ item.sub_cat }}
+                                                    </div>
+                                                {% else %}
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 border-white" style="font-size:20px;color:white; height:56px !important; width:376px !important;"></div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        {% endfor %}
+
+                                        <div class="d-lg-block d-md-block d-sm-none d-none color-blue" style="background: white; font-size: 22px;">YOU ARE ALWAYS</div>
+                                        <div class="row" style="height:60px !important; margin:0px !important;">
+                                            <div class="col-lg-4 col-md-4 col-sm-12 d-lg-block d-md-block d-sm-none d-none" style="color: white !important; padding-top: 14px !important; font-size:20px !important;">
+                                                Past
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12 d-lg-block d-md-block d-sm-none d-none" style="color: white !important;  font-size: 16px; font-size:20px !important;">
+                                                The Center Of Your Universe
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12 d-lg-block d-md-block d-sm-none d-none" style="color: white !important; padding-top: 14px !important; font-size:20px !important;">
+                                                Future
+                                            </div>
+                                        </div>
+                                        <div class="color-blue" style="background: white; font-size:22px !important;">IN A HABITAT</div>
+                                        <div class="row" style="max-width:1135px !important;margin-left:0px;margin-right:-6px;">
+                                            {% for space in spaces %}
+                                                {% if forloop.counter0|divisibleby:3 %}
+                                                    <!--<div class="row" style="max-width:1136px !important;margin-left:0px;margin-right:-4px;">-->
+                                                {% endif %}
+                                                <div class="col-lg-4 col-md-4 col-sm-12 col-12 border-white" style="padding-top:10px !important;font-size:20px;color:white; height:56px !important; width:376px !important;cursor: pointer;" onclick="openCategory('questions/{{ space.name }}')">
+                                                    {{ space.name }}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="recipe-detail min_height_600">
+                            <div class="container">
+                                <div class="col-12">
+                                    Please subscribe to one of our plan to view this page. <a href="{% url 'profile_subscription' %}">Click
+                                    Here</a> to go to the subscription page.
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                {% endblock %} 
+                <div class="col-md-6 no-padding">
+                    <div class="row">
+                        <div class="col-4 bg-blue border-1 flex-wrap flex-center text-white">
+                            <h3 style="line-height:2;">Master Your Thoughts <br>& You Will<br> Master Your Life</h3>
+                        </div>
+                        <div class="col-8 reduce-padding">
+                            <div class="row text-white" style="font-size:1.3rem;">
+                                <div class="col-12 bg-blue flex-wrap flex-center" style="border-radius:10px;min-height:5rem;margin-bottom:5px;">
+                                    <h4>3 - Compare with other Levels of Ability</h4>
+                                </div>
+                                <div class="col-12 bg-blue text-uppercase flex-wrap flex-center text-uppercase" style="font-size:26px;border-radius:10px 10px 0px 0px;">
+                                    <span class="increasefont">Ability</span>&nbsp;<span class="increasefont">Level</span>&nbsp;<span class="increasefont"> Scale</span>&nbsp;<span class="increasefont"> at</span>&nbsp;<span class="increasefont"> task</span>
+                                </div>
+                                <div class="col-12 no-padding">
+                                    <table style="width:100%;">
+                                        <tbody style="width:100%;">
+                                            <tr>
+                                                <td class="bg-blue" style="width:6%;text-align:center;border-top:2px solid rgb(255,255,255);border-bottom:2px solid rgb(255,255,255);font-size:20px;">H<br/>I<br/>G<br/>H</td>
+                                                <td class="no-padding" style="width:92%;">
+                                                    <table style="font-size:26px;height:100%;width:100%;">
+                                                        <tr style="font-size:100%;">
+                                                            <td class="color-black" style="background-color:rgb(255,255,255);width:1.5rem;text-align:center;">9</td>
+                                                            <td class="bg-green" style="width:5rem;text-align:center;font-size:18px;border-bottom:1px solid rgb(255, 255, 255);">High</td>
+                                                            <td class="color-black border-bottom-1 sm-padding flex-wrap flex-center" style="font-size:18px;background-color:rgb(255,255,255);min-height:41px;" id="high_high">{{ subCategoriesList1.0.selftalks.0.high_high }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="color-black" style="background-color:rgb(255,255,255);width:1.5rem;text-align:center;">8</td>
+                                                            <td class="bg-green" style="width:5rem;text-align:center;font-size:18px;border-bottom:1px solid rgb(255, 255, 255);">Medium</td>
+                                                            <td class="color-black border-bottom-1 sm-padding flex-wrap flex-center" style="font-size:18px;background-color:rgb(255,255,255);min-height:41px;" id="high_medium">{{ subCategoriesList1.0.selftalks.0.high_medium }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="color-black" style="background-color:rgb(255,255,255);width:1.5rem;text-align:center;">7</td>
+                                                            <td class="bg-green" style="width:5rem;text-align:center;font-size:18px;">Low</td>
+                                                            <td class="color-black border-bottom-1 sm-padding flex-wrap flex-center" style="font-size:18px;background-color:rgb(255,255,255);min-height:41px;" id="high_low">{{ subCategoriesList1.0.selftalks.0.high_low }}</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-blue" style="width:6%;text-align:center;border-top:2px solid rgb(255,255,255);border-bottom:2px solid rgb(255,255,255);font-size:20px;">M<br/>E<br/>D</td>
+                                                <td class="no-padding" style="width:92%;">
+                                                    <table style="font-size:26px;height:100%;width:100%;">
+                                                        <tr style="font-size:100%;">
+                                                            <td class="color-black" style="background-color:rgb(255,255,255);width:1.5rem;text-align:center;">6</td>
+                                                            <td class="bg-green" style="width:5rem;text-align:center;font-size:18px;border-bottom:1px solid rgb(255, 255, 255);">High</td>
+                                                            <td class="color-black border-bottom-1 sm-padding flex-wrap flex-center" style="font-size:18px;background-color:rgb(255,255,255);min-height:41px;" id="medium_high">{{ subCategoriesList1.0.selftalks.0.medium_high }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="color-black" style="background-color:rgb(255,255,255);width:1.5rem;text-align:center;">5</td>
+                                                            <td class="bg-green" style="width:5rem;text-align:center;font-size:18px;border-bottom:1px solid rgb(255, 255, 255);">Medium</td>
+                                                            <td class="color-black border-bottom-1 sm-padding flex-wrap flex-center" style="font-size:18px;background-color:rgb(255,255,255);min-height:41px;" id="medium_medium">{{ subCategoriesList1.0.selftalks.0.medium_medium }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="color-black" style="background-color:rgb(255,255,255);width:1.5rem;text-align:center;">4</td>
+                                                            <td class="bg-green" style="width:5rem;text-align:center;font-size:18px;border-bottom:1px solid rgb(255, 255, 255);">Low</td>
+                                                            <td class="color-black border-bottom-1 sm-padding flex-wrap flex-center" style="font-size:18px;background-color:rgb(255,255,255);min-height:41px;" id="medium_low">{{ subCategoriesList1.0.selftalks.0.medium_low }}</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-blue" style="width:6%;text-align:center;border-top:2px solid rgb(255,255,255);border-bottom:2px solid rgb(255,255,255);font-size:20px;">L<br/>O<br/>W</td>
+                                                <td class="no-padding" style="width:92%;">
+                                                    <table style="font-size:26px;height:100%;width:100%;">
+                                                        <tr style="font-size:100%;">
+                                                            <td class="color-black" style="background-color:rgb(255,255,255);width:1.5rem;text-align:center;">3</td>
+                                                            <td class="bg-green" style="width:5rem;text-align:center;font-size:18px;border-bottom:1px solid rgb(255, 255, 255);">High</td>
+                                                            <td class="color-black border-bottom-1 sm-padding flex-wrap flex-center" style="font-size:18px;background-color:rgb(255,255,255);min-height:41px;" id="low_high">{{ subCategoriesList1.0.selftalks.0.low_high }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="color-black" style="background-color:rgb(255,255,255);width:1.5rem;text-align:center;">2</td>
+                                                            <td class="bg-green" style="width:5rem;text-align:center;font-size:18px;border-bottom:1px solid rgb(255, 255, 255);">Medium</td>
+                                                            <td class="color-black border-bottom-1 sm-padding flex-wrap flex-center" style="font-size:18px;background-color:rgb(255,255,255);min-height:41px;" id="low_medium">{{ subCategoriesList1.0.selftalks.0.low_medium }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="color-black" style="background-color:rgb(255,255,255);width:1.5rem;text-align:center;">1</td>
+                                                            <td class="bg-green" style="width:5rem;text-align:center;font-size:18px;">Low</td>
+                                                            <td class="color-black border-bottom-1 sm-padding flex-wrap flex-center" style="font-size:18px;background-color:rgb(255,255,255);min-height:41px;" id="low_low">{{ subCategoriesList1.0.selftalks.0.low_low }}</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="snackbar">No record found against this selftalk..</div>
+    <div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+        <div id="loader" style="overflow-y: hidden !important;"></div>
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        function openEditModal(id, timelineID, categoryID, starttime, endtime) {
+            $('#update_activity_start_time_field').val(starttime);
+            $('#update_activity_end_time_field').val(endtime);
+            $('#update_activity_timeline_id').val(timelineID);
+            $('#update_activity_category_id').val(categoryID);
+            $('#update_activity_id').val(parseInt(id));
+            $('#update-activity-error-msg').css('display', 'none');
+            $('.update_activity_modal').modal('show');
+            $('.knowledge_detail_modal').modal('hide');
+        }
+
+        function openCategory(val) {
+            window.location.href = val;
+        }
+
+        function openKnowledgeModal(route, text, heading) {
+            $('#knowledge-modal-heading').text(heading);
+            $('#knowledge-modal-body').text(text);
+            $('#knowledge-modal-footer a').attr("href", route);
+            $('.knowledge_detail_modal').modal('show');
+        }
+
+        $('.save_preferences').on('click', function () {
+            var startTime = $('#start_time_field').val();
+            var endTime = $('#end_time_field').val();
+            var timelineID = $('#new_timeline_id').val();
+            var categoryID = $('#new_category_id').val();
+            if (!startTime || !endTime || !timelineID || !categoryID) {
+                $('#error-modal-body').html("<p>Please fill out all fields...</p>");
+                $('.error_modal').modal('show');
+                $('.add_new_activity_modal').modal('hide');
+                return;
+            }
+            if (startTime >= endTime) {
+                $('#error-modal-body').html("<p>Invalid Time: Start and end time are not valid. End time should be greater than start time...</p>");
+                $('.error_modal').modal('show');
+                $('.add_new_activity_modal').modal('hide');
+                return;
+            }
+            $.ajax({
+                url: '/awareness/add-new-timeline/',
+                type: 'post',
+                data: {
+                    start_time: startTime,
+                    end_time: endTime,
+                    timeline_id: timelineID,
+                    category_id: categoryID,
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function (res) {
+                    $('.add_new_activity_modal').modal('hide');
+                    location.reload();
+                },
+                error: function (res) {
+                    response = JSON.parse(res.responseText);
+                    $('#error-modal-body').html(response.msg);
+                    $('.add_new_activity_modal').modal('hide');
+                    $('.error_modal').modal('show');
+                }
+            })
+        });
+        $('.update_activity').on('click', function () {
+            $('#update-activity-error-msg').css('display', 'none');
+            $('#update_activity_start_time_field').removeClass('border-danger');
+            $('#update_activity_end_time_field').removeClass('border-danger');
+            $('#update_activity_timeline_id').removeClass('border-danger');
+            $('#update_activity_category_id').removeClass('border-danger');
+            $('#activity-delete-confirmation').css('display', 'none');
+            var startTime = $('#update_activity_start_time_field').val();
+            var endTime = $('#update_activity_end_time_field').val();
+            var timelineID = $('#update_activity_timeline_id').val();
+            var categoryID = $('#update_activity_category_id').val();
+            var ID = $('#update_activity_id').val();
+            if (!startTime || !endTime || !timelineID || !categoryID) {
+                $('#update-activity-error-msg').text("Please complete all fields...");
+                $('#update-activity-error-msg').css('display', 'unset');
+                if (!startTime) {
+                    $('#update_activity_start_time_field').addClass('border-danger');
+                }
+                if (!endTime) {
+                    $('#update_activity_end_time_field').addClass('border-danger');
+                }
+                if (!timelineID) {
+                    $('#update_activity_timeline_id').addClass('border-danger');
+                }
+                if (!categoryID) {
+                    $('#update_activity_category_id').addClass('border-danger');
+                }
+                return;
+            }
+            if (startTime >= endTime) {
+                $('#update-activity-error-msg').text("Invalid Time: Start and end time are not valid. End time should be greater than start time...");
+                $('#update-activity-error-msg').css('display', 'unset');
+                $('#update_activity_start_time_field').addClass('border-danger');
+                $('#update_activity_end_time_field').addClass('border-danger');
+                return;
+            }
+            $.ajax({
+                url: '/awareness/update-activity/',
+                type: 'post',
+                data: {
+                    start_time: startTime,
+                    end_time: endTime,
+                    timeline_id: timelineID,
+                    category_id: categoryID,
+                    activity_id: ID,
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function (res) {
+                    $('.update_activity_modal').modal('hide');
+                    location.reload();
+                },
+                error: function (res) {
+                    response = JSON.parse(res.responseText);
+                    $('#update-activity-error-msg').text(response.msg)
+                    $('#update-activity-error-msg').css('display', 'unset');
+                }
+            })
+        });
+        $('.delete_activity').on('click', function () {
+            $('#activity-delete-confirmation').css('display', 'block');
+        });
+        $('#cancel-delete-activity').on('click', function () {
+            $('#activity-delete-confirmation').css('display', 'none');
+        });
+        $('#confirm-delete-activity').on('click', function () {
+            var ID = $('#update_activity_id').val();
+            $.ajax({
+                url: '/awareness/delete-activity/',
+                type: 'post',
+                data: {
+                    activity_id: ID,
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function (res) {
+                    $('.update_activity_modal').modal('hide');
+                    location.reload();
+                },
+                error: function (res) {
+                    response = JSON.parse(res.responseText);
+                    $('#update-activity-error-msg').text(response.msg)
+                    $('#update-activity-error-msg').css('display', 'unset');
+                }
+            });
+        });
+        $('.update_timeline').on('click', function () {
+            var startTime = $('#update_start_time_field').val();
+            var endTime = $('#update_end_time_field').val();
+            if (!startTime || !endTime) {
+                $('#update-error-modal-body').html("<p>Please choose a valid start and end time...</p>");
+                $('.update_error_modal').modal('show');
+                $('.add_new_timeline_modal').modal('hide');
+                return;
+            }
+            if (startTime >= endTime) {
+                $('#update-error-modal-body').html("<p>Invalid Time: Start and end time are not valid. End time should be greater than start time...</p>");
+                $('.update_error_modal').modal('show');
+                $('.add_new_timeline_modal').modal('hide');
+                return;
+            }
+            $.ajax({
+                url: '/awareness/update-user-time/',
+                type: 'post',
+                data: {
+                    start_time: startTime,
+                    end_time: endTime,
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function (res) {
+                    $('.add_new_timeline_modal').modal('hide');
+                    location.reload();
+                },
+                error: function (res) {
+                    response = JSON.parse(res.responseText);
+                    $('#update-error-modal-body').html(response.msg);
+                    $('.add_new_timeline_modal').modal('hide');
+                    $('.update_error_modal').modal('show');
+                }
+            })
+        });
+        /*if('{{selftalk_first}}'=="None"){
+            $("#polarity").val('').prop('disabled', true);
+            $("#function").val('').prop('disabled', true);
+            $("#emotion").val('').prop('disabled', true);
+            $("#timesaday").val('').prop('disabled', true);
+            $("#timeitlast").val('').prop('disabled', true);
+            $("#howintense").val('').prop('disabled', true);
+            $("#after").val('').prop('disabled', true);
+            $("#during").val('').prop('disabled', true);
+            $("#before").val('').prop('disabled', true);
+            $("#who_am_i_talking").val('').prop('disabled', true);
+            $("#is_now_a_good_time").val('').prop('disabled', true);
+        }
+        if('{{selftalk_first}}'!="None"){
+            //console.log("inside second")
+            $("#polarity").val('').prop('disabled', false);
+            $("#function").val('').prop('disabled', false);
+            $("#emotion").val('').prop('disabled', false);
+            $("#timesaday").val('').prop('disabled', false);
+            $("#timeitlast").val('').prop('disabled', false);
+            $("#howintense").val('').prop('disabled', false);
+            $("#after").val('').prop('disabled', false);
+            $("#during").val('').prop('disabled', false);
+            $("#before").val('').prop('disabled', false);
+            $("#who_am_i_talking").val('').prop('disabled', false);
+            $("#is_now_a_good_time").val('').prop('disabled', false);
+        }*/
+        var var_timesaday, var_timeitlast;
+        function calculations(){
+            var_timesaday=$("#timesaday").val();
+            var_timeitlast=$("#timeitlast").val();
+            $("#day").text(var_timesaday*var_timeitlast);
+            $("#week").text(var_timesaday*var_timeitlast*7);
+            $("#month").text((var_timesaday*var_timeitlast*30)/60);
+            $("#3month").text((var_timesaday*var_timeitlast*90)/1440);
+            $("#year").text((var_timesaday*var_timeitlast*360)/60);
+            $("#10year").text((var_timesaday*var_timeitlast*3600)/60);
+            $("#daymins").addClass('text-gray');
+            $("#wkmins").addClass('text-gray');
+            $("#mthhrs").addClass('text-gray');
+            $("#3mthdays").addClass('text-gray');
+            $("#yearhrs").addClass('text-gray');
+            $("#10yearhrs").addClass('text-gray');
+        }
+        $(document).ready(calculations())
+        /*$( "#timesaday" ).change(function() {
+            var_timesaday=$("#timesaday :selected").val();
+            var_timeitlast=$("#timeitlast :selected").val();
+            $("#day").text(var_timesaday*var_timeitlast);
+            $("#week").text(var_timesaday*var_timeitlast*7);
+            $("#month").text((var_timesaday*var_timeitlast*30)/60);
+            $("#3month").text((var_timesaday*var_timeitlast*90)/1440);
+            $("#year").text((var_timesaday*var_timeitlast*360)/60);
+            $("#10year").text((var_timesaday*var_timeitlast*3600)/60);
+            $("#daymins").addClass('text-gray');
+            $("#wkmins").addClass('text-gray');
+            $("#mthhrs").addClass('text-gray');
+            $("#3mthdays").addClass('text-gray');
+            $("#yearhrs").addClass('text-gray');
+            $("#10yearhrs").addClass('text-gray');
+        });
+        $( "#timeitlast" ).change(function() {
+            var_timesaday=$("#timesaday :selected").val();
+            var_timeitlast=$("#timeitlast :selected").val();
+            $("#day").text(var_timesaday*var_timeitlast);
+            $("#week").text(var_timesaday*var_timeitlast*7);
+            $("#month").text((var_timesaday*var_timeitlast*30)/60);
+            $("#3month").text((var_timesaday*var_timeitlast*90)/1440);
+            $("#year").text((var_timesaday*var_timeitlast*360)/60);
+            $("#10year").text((var_timesaday*var_timeitlast*3600)/60);
+            $("#daymins").addClass('text-gray');
+            $("#wkmins").addClass('text-gray');
+            $("#mthhrs").addClass('text-gray');
+            $("#3mthdays").addClass('text-gray');
+            $("#yearhrs").addClass('text-gray');
+            $("#10yearhrs").addClass('text-gray');
+        });*/
+        $("#daymins").on("click",function(){
+            if (!$("#daymins").hasClass("text-gray") ){
+            $("#day").text(var_timesaday*var_timeitlast);
+            $("#dayhrs").removeClass('text-gray');
+            $("#daymins").addClass('text-gray');
+            }
+        })
+        $("#dayhrs").on("click",function(){
+            if (!$("#dayhrs").hasClass("text-gray")){
+            $("#day").text((var_timesaday*var_timeitlast)/60);
+            $("#daymins").removeClass('text-gray');
+            $("#dayhrs").addClass('text-gray');
+            }
+        })
+
+        $("#wkmins").on("click",function(){
+            if (!$("#wkmins").hasClass("text-gray") ){
+            $("#week").text(var_timesaday*var_timeitlast*7);
+            $("#wkhrs").removeClass('text-gray');
+            $("#wkmins").addClass('text-gray');
+            }
+        })
+        $("#wkhrs").on("click",function(){
+            if (!$("#wkhrs").hasClass("text-gray") ){
+            $("#week").text((var_timesaday*var_timeitlast*7)/60);
+            $("#wkmins").removeClass('text-gray');
+            $("#wkhrs").addClass('text-gray');
+            }
+        })
+
+        $("#mthhrs").on("click",function(){
+            if (!$("#mthhrs").hasClass("text-gray") ){
+            $("#month").text((var_timesaday*var_timeitlast*30)/60);
+            $("#mthdays").removeClass('text-gray');
+            $("#mthhrs").addClass('text-gray');
+            }
+        })
+        $("#mthdays").on("click",function(){
+            if (!$("#mthdays").hasClass("text-gray") ){
+            $("#month").text((var_timesaday*var_timeitlast*30)/1440);
+            $("#mthhrs").removeClass('text-gray');
+            $("#mthdays").addClass('text-gray');
+            }
+        })
+
+        $("#3mthdays").on("click",function(){
+            if (!$("#3mthdays").hasClass("text-gray") ){
+            $("#3month").text((var_timesaday*var_timeitlast*90)/1440);
+            $("#3mthwks").removeClass('text-gray');
+            $("#3mthdays").addClass('text-gray');
+            }
+        })
+        $("#3mthwks").on("click",function(){
+            if (!$("#3mthwks").hasClass("text-gray") ){
+            $("#3month").text((var_timesaday*var_timeitlast*90)/10080);
+            $("#3mthdays").removeClass('text-gray');
+            $("#3mthwks").addClass('text-gray');
+            }
+        })
+
+        $("#yearhrs").on("click",function(){
+            if (!$("#yearhrs").hasClass("text-gray") ){
+            $("#year").text((var_timesaday*var_timeitlast*360)/60);
+            $("#yeardays").removeClass('text-gray');
+            $("#yearhrs").addClass('text-gray');
+            }
+        })
+        $("#yeardays").on("click",function(){
+            if (!$("#yeardays").hasClass("text-gray") ){
+            $("#year").text((var_timesaday*var_timeitlast*360)/1440);
+            $("#yearhrs").removeClass('text-gray');
+            $("#yeardays").addClass('text-gray');
+            }
+        })
+
+        $("#10yearhrs").on("click",function(){
+            if (!$("#10yearhrs").hasClass("text-gray") ){
+            $("#10year").text((var_timesaday*var_timeitlast*3600)/60);
+            $("#10yeardays").removeClass('text-gray');
+            $("#10yearhrs").addClass('text-gray');
+            }
+        })
+        $("#10yeardays").on("click",function(){
+            if (!$("#10yeardays").hasClass("text-gray") ){
+            $("#10year").text((var_timesaday*var_timeitlast*3600)/1440);
+            $("#10yearhrs").removeClass('text-gray');
+            $("#10yeardays").addClass('text-gray');
+            }
+        })
+        $("#x25").on("click",function(){
+            var againclick_check_x25 = false; 
+            if(!$("#x25").hasClass("border-2")&&!$("#x50").hasClass("border-2")&&!$("#x100").hasClass("border-2")&&againclick_check_x25==false){
+                againclick_check_x25=true;
+                $("#day").text($("#day").text()*25);
+                $("#week").text($("#week").text()*25);
+                $("#month").text($("#month").text()*25);
+                $("#3month").text($("#3month").text()*25);
+                $("#year").text($("#year").text()*25);
+                $("#10year").text($("#10year").text()*25);
+                $("#x25").addClass("border-2");
+            }
+            if($("#x25").hasClass("border-2")&&againclick_check_x25==false){
+                againclick_check_x25=true;
+                $("#day").text($("#day").text()/25);
+                $("#week").text($("#week").text()/25);
+                $("#month").text($("#month").text()/25);
+                $("#3month").text($("#3month").text()/25);
+                $("#year").text($("#year").text()/25);
+                $("#10year").text($("#10year").text()/25);
+                $("#x25").removeClass("border-2");
+            }
+            if($("#x50").hasClass("border-2")&&againclick_check_x25==false){
+                againclick_check_x25=true;
+                $("#day").text($("#day").text()/2);
+                $("#week").text($("#week").text()/2);
+                $("#month").text($("#month").text()/2);
+                $("#3month").text($("#3month").text()/2);
+                $("#year").text($("#year").text()/2);
+                $("#10year").text($("#10year").text()/2);
+                $("#x50").removeClass("border-2");
+                $("#x25").addClass("border-2");
+            }
+            if($("#x100").hasClass("border-2")&&againclick_check_x25==false){
+                againclick_check_x25=true;
+                $("#day").text($("#day").text()/4);
+                $("#week").text($("#week").text()/4);
+                $("#month").text($("#month").text()/4);
+                $("#3month").text($("#3month").text()/4);
+                $("#year").text($("#year").text()/4);
+                $("#10year").text($("#10year").text()/4);
+                $("#x100").removeClass("border-2");
+                $("#x25").addClass("border-2");
+            }
+        })
+        $("#x50").on("click",function(){
+            var againclick_check_x50=false;
+            if(!$("#x25").hasClass("border-2")&&!$("#x50").hasClass("border-2")&&!$("#x100").hasClass("border-2")&&againclick_check_x50==false){
+                againclick_check_x50=true;
+                $("#day").text($("#day").text()*50);
+                $("#week").text($("#week").text()*50);
+                $("#month").text($("#month").text()*50);
+                $("#3month").text($("#3month").text()*50);
+                $("#year").text($("#year").text()*50);
+                $("#10year").text($("#10year").text()*50);
+                $("#x50").addClass("border-2");
+            }
+            if($("#x25").hasClass("border-2")&&againclick_check_x50==false){
+                againclick_check_x50=true;
+                $("#day").text($("#day").text()*2);
+                $("#week").text($("#week").text()*2);
+                $("#month").text($("#month").text()*2);
+                $("#3month").text($("#3month").text()*2);
+                $("#year").text($("#year").text()*2);
+                $("#10year").text($("#10year").text()*2);
+                $("#x50").addClass("border-2");
+                $("#x25").removeClass("border-2");
+            }
+            if($("#x50").hasClass("border-2")&&againclick_check_x50==false){
+                againclick_check_x50=true;
+                $("#day").text($("#day").text()/50);
+                $("#week").text($("#week").text()/50);
+                $("#month").text($("#month").text()/50);
+                $("#3month").text($("#3month").text()/50);
+                $("#year").text($("#year").text()/50);
+                $("#10year").text($("#10year").text()/50);
+                $("#x50").removeClass("border-2");
+            }
+            if($("#x100").hasClass("border-2")&&againclick_check_x50==false){
+                againclick_check_x50=true;
+                $("#day").text($("#day").text()/2);
+                $("#week").text($("#week").text()/2);
+                $("#month").text($("#month").text()/2);
+                $("#3month").text($("#3month").text()/2);
+                $("#year").text($("#year").text()/2);
+                $("#10year").text($("#10year").text()/2);
+                $("#x100").removeClass("border-2");
+                $("#x50").addClass("border-2");
+            }
+        })
+        $("#x100").on("click",function(){
+            againclick_check_x100=false;
+            if(!$("#x25").hasClass("border-2")&&!$("#x50").hasClass("border-2")&&!$("#x100").hasClass("border-2")&&againclick_check_x100==false){
+                againclick_check_x100=true;
+                $("#day").text($("#day").text()*100);
+                $("#week").text($("#week").text()*100);
+                $("#month").text($("#month").text()*100);
+                $("#3month").text($("#3month").text()*100);
+                $("#year").text($("#year").text()*100);
+                $("#10year").text($("#10year").text()*100);
+                $("#x100").addClass("border-2");
+            }
+            if($("#x25").hasClass("border-2")&&againclick_check_x100==false){
+                againclick_check_x100=true;
+                $("#day").text($("#day").text()*4);
+                $("#week").text($("#week").text()*4);
+                $("#month").text($("#month").text()*4);
+                $("#3month").text($("#3month").text()*4);
+                $("#year").text($("#year").text()*4);
+                $("#10year").text($("#10year").text()*4);
+                $("#x25").removeClass("border-2");
+                $("#x100").addClass("border-2");
+            }
+            if($("#x50").hasClass("border-2")&&againclick_check_x100==false){
+                againclick_check_x100=true;
+                $("#day").text($("#day").text()*2);
+                $("#week").text($("#week").text()*2);
+                $("#month").text($("#month").text()*2);
+                $("#3month").text($("#3month").text()*2);
+                $("#year").text($("#year").text()*2);
+                $("#10year").text($("#10year").text()*2);
+                $("#x50").removeClass("border-2");
+                $("#x100").addClass("border-2");
+            }
+            if($("#x100").hasClass("border-2")&&againclick_check_x100==false){
+                againclick_check_x100=true;
+                $("#day").text($("#day").text()/100);
+                $("#week").text($("#week").text()/100);
+                $("#month").text($("#month").text()/100);
+                $("#3month").text($("#3month").text()/100);
+                $("#year").text($("#year").text()/100);
+                $("#10year").text($("#10year").text()/100);
+                $("#x100").removeClass("border-2");
+            }
+        })
+        /*$(".want-spinner").on("click", function(e) {
+            $("#loadMe").modal({
+            backdrop: "static", 
+            keyboard: false, 
+            show: true 
+            });
+        });*/
+        var selftalk_id=1
+        function get_seltalks(id,name, high_high, high_medium, high_low, medium_high, medium_medium, medium_low, low_high, low_medium, low_low,polarity_self_talk,function_self_talk,emotion_self_talk ){
+            selftalk_id=id
+            $('#selftalkname').text(name)
+            $('#thought_selftalk_name').text(name)
+            $('#high_high').text(high_high)
+            $('#high_medium').text(high_medium)
+            $('#high_low').text(high_low)
+            $('#medium_high').text(medium_high)
+            $('#medium_medium').text(medium_medium)
+            $('#medium_low').text(medium_low)
+            $('#low_high').text(low_high)
+            $('#low_medium').text(low_medium)
+            $('#low_low').text(low_low)
+            $('#polarity_self_talk').text(polarity_self_talk)
+            $('#function_self_talk').text(function_self_talk)
+            $('#emotion_self_talk').text(emotion_self_talk)
+            getFundamentals(selftalk_id);
+        }
+        function getFundamentals(selftalk_id){
+            $.ajax({
+                url: "get_fundamentals",
+                type: 'get',
+                data: {
+                    'selftalk_id': selftalk_id
+                },
+                success: function(data){
+                    dataType: "json",
+                    $('#loadMe').modal('show');
+                    if(data["id"]!=''){
+                        $('#before').val(data["before"])
+                        $('#during').val(data["during"])
+                        $('#after').val(data["after"])
+                        $('#who_am_i_talking').val(data["who_am_i_talking_to"])
+                        $('#is_now_a_good_time').val(data["is_now_a_good_time_to_talk"])
+                        $('#timesaday').val(data["times_a_day"])
+                        $('#timeitlast').val(data["times_it_last"])
+                        $('#howintense').val(data["how_intense"])
+                        $('#polarity').val(data["polarity"])
+                        $('#polarity_div').text(data["polarity"])
+                        $('#function').val(data["function"])
+                        $('#function_div').text(data["function"])
+                        $('#emotion').val(data["emotion"])
+                        $('#emotion_div').text(data["emotion"])
+                    }
+                    if(data["id"]==''){
+                        $('#before').val('')
+                        $('#during').val('')
+                        $('#after').val('')
+                        $('#who_am_i_talking').val('')
+                        $('#is_now_a_good_time').val('')
+                        $('#timesaday').val('')
+                        $('#timeitlast').val('')
+                        $('#howintense').val('')
+                        $('#polarity').val('')
+                        $('#polarity_div').text('')
+                        $('#function').val('')
+                        $('#function_div').text('')
+                        $('#emotion').val('')
+                        $('#emotion_div').text('')
+                    }
+                    $('#loadMe').on('shown.bs.modal', function (e) {
+                        $("#loadMe").modal('hide');
+                    })
+                    SnackBar()
+                }
+            }).done(function () {
+                calculations()
+            }).fail(function (err) {
+                
+            });
+        };
+        function saveFundamentals(){
+            var times_a_day_save=$("#timesaday :selected").val();
+            var times_it_last_save=$("#timeitlast :selected").val();
+            var polarity_value = $('#polarity :selected').val();
+            var function_value = $('#function :selected').val();
+            var emotion_value = $('#emotion :selected').val();
+            var how_intense = $('#howintense :selected').val();
+            var who_am_i_talking = $('#who_am_i_talking :selected').val();
+            var is_now_a_good_time = $('#is_now_a_good_time :selected').val();
+            var after = $('#after :selected').val();
+            var during = $('#during :selected').val();
+            var before = $('#before :selected').val();
+            $('#loadMe').modal('show');
+            $.ajax({
+                url: "add_fundamentals",
+                type: 'post',
+                data: {
+                    'csrfmiddlewaretoken': '{{csrf_token}}',
+                    'selftalk_id': selftalk_id,
+                    'before': before,
+                    'during': during,
+                    'after': after,
+                    'who_am_i_talking': who_am_i_talking,
+                    'is_now_a_good_time':is_now_a_good_time,
+                    'times_a_day': times_a_day_save,
+                    'times_it_last': times_it_last_save,
+                    'how_intense': how_intense,
+                    'polarity': polarity_value,
+                    'function': function_value,
+                    'emotion': emotion_value
+                }
+            }).done(function () {
+                calculations()
+                $('#loadMe').on('shown.bs.modal', function (e) {
+                    $("#loadMe").modal('hide');
+                })
+            }).fail(function (err) {
+                
+            });
+        };
+        function SnackBar() {
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+    </script>
+{% endblock %}

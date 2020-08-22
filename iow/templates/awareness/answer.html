@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% load bootstrap4 %}
+{% block title %}Let's capture your thoughts{% endblock %}
+
+{% block main %}
+    {% if request.user.profile.has_active_subscription %}
+        <div class="recipe-detail min_height_600">
+            <div class="container">
+                {% if answer %}
+                    <div class="row" style="text-align: left">
+                        <div class="col-lg-6 col-sm-12 col-md-6 col-12 reduce-padding">
+                            <div class="col-lg-12 reduce-padding">
+                                My Belief
+                            </div>
+                            <div class="col-lg-12 reduce-padding">
+                                <input class="form-control" type="text" {% if answer_type == 'category' %}
+                                       value="{{ answer.text }}" {% else %}
+                                       value="{{ space_name }}" {% endif %}disabled>
+                            </div>
+                            <div class="col-lg-12 reduce-padding" style="margin-top: 25px">
+                                <iframe width="100%" height="315" src="{{ answer.videoLink }}" frameborder="0"
+                                        allowfullscreen></iframe>
+                            </div>
+                            <div class="reduce-padding col-lg-12" style="margin-top: 25px;color: black;"><h4 style="color:black;">Recommended Packs</h4>
+                            </div>
+                            <div class="col-lg-12 reduce-padding flex-wrap" style="margin-top: 25px;">
+                                {% for ps in practiceSessions %}
+                                    <div class="col-lg-6 pb-4">
+                                        <div class="box">
+                                            <h4 class="pb-2 font-weight-bold">
+                                                {{ ps.affirmation.title }}
+                                            </h4>
+                                            <p class="mb-5">
+                                                {{ ps.affirmation.affirmation_texts.count }} Affirmations <br>
+                                                {{ ps.affirmation.category.name }}, {{ ps.affirmation.subcategory.name }}
+                                            </p>
+                                            <p class="bottom_position">
+
+                                                {% if ps|is_already_added:request.user %}
+                                                    <button class="btn btn-dark_lila round_btn mb-1 cursor_pointer"
+                                                            disabled>
+                                                        <i class="fal fa-check"></i> <span>Added to my pack</span>
+                                                    </button>
+                                                {% elif not profile.can_have_more_sessions %}
+                                                    <a href="{% url 'profile_subscription' %}">
+                                                        <button class="btn btn-dark_lila round_btn cursor_pointer">
+                                                            <span>Please subscribe</span>
+                                                        </button>
+                                                    </a>
+                                                {% else %}
+                                                    <button class="btn btn-dark_lila round_btn add_to_pack_btn"
+                                                            data-session_id="{{ ps.id }}">
+                                                        <i class="fal fa-plus"></i> <span>Add to my pack</span>
+                                                    </button>
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-md-6 col-12 reduce-padding">
+                            <div class="col-lg-12 reduce-padding">
+                                <div class="dashboard-box clearfix">
+                                    <div class="col-lg-12 reduce-padding" style="text-align: left">
+                                        Optimal Conversation Thoughts
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding">
+                                        <textarea class="form-control" disabled>{{ answer.OTCText }}</textarea>
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding text-left flex-wrap" style="margin-top: 10px;">
+                                        <div class="col-lg-5 reduce-padding">
+                                            How often think it/day:
+                                        </div>
+                                        <div class="col-lg-7 reduce-padding">
+                                            <input class="form-control" type="number"
+                                                   value="{{ answer.OTCThinkPerDay }}"
+                                                   disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding text-left flex-wrap" style="margin-top: 10px;">
+                                        <div class="col-lg-6 reduce-padding">
+                                            How long think it each time
+                                        </div>
+                                        <div class="col-lg-6 reduce-padding">
+                                            <input class="form-control" type="number"
+                                                   value="{{ answer.OTCThinkEachTime }}"
+                                                   disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding text-left flex-wrap" style="margin-top: 10px;">
+                                        <div class="col-lg-3 reduce-padding">
+                                            Intensity
+                                        </div>
+                                        <div class="col-lg-9 reduce-padding">
+                                            <input class="form-control" type="text" value="{{ answer.OTCIntensity }}"
+                                                   disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 reduce-padding" style="margin-top: 20px">
+                                <div class="dashboard-box clearfix">
+                                    <div class="col-lg-12 reduce-padding" style="text-align: left">
+                                        Improved Conversation Thoughts
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding">
+                                        <textarea class="form-control" disabled>{{ answer.ITCText }}</textarea>
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding flex-wrap text-left" style="margin-top: 10px;">
+                                        <div class="col-lg-5 reduce-padding">
+                                            How often think it/day:
+                                        </div>
+                                        <div class="col-lg-7 reduce-padding">
+                                            <input class="form-control" type="number"
+                                                   value="{{ answer.ITCThinkPerDay }}"
+                                                   disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding text-left flex-wrap" style="margin-top: 10px;">
+                                        <div class="col-lg-6 reduce-padding">
+                                            How long think it each time
+                                        </div>
+                                        <div class="col-lg-6 reduce-padding">
+                                            <input class="form-control" type="number"
+                                                   value="{{ answer.ITCThinkEachTime }}"
+                                                   disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding text-left flex-wrap" style="margin-top: 10px;">
+                                        <div class="col-lg-3 reduce-padding">
+                                            Intensity
+                                        </div>
+                                        <div class="col-lg-9 reduce-padding">
+                                            <input class="form-control" type="text" value="{{ answer.ITCIntensity }}"
+                                                   disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 reduce-padding" style="margin-top: 20px">
+                                <div class="dashboard-box clearfix">
+                                    <div class="col-lg-12 reduce-padding" style="text-align: left">
+                                        Negative Conversation Thoughts
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding">
+                                        <textarea class="form-control" disabled>{{ answer.NTCText }}</textarea>
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding text-left flex-wrap" style="margin-top: 10px;">
+                                        <div class="col-lg-5 reduce-padding">
+                                            How often think it/day:
+                                        </div>
+                                        <div class="col-lg-7 reduce-padding">
+                                            <input class="form-control" type="number"
+                                                   value="{{ answer.NTCThinkPerDay }}"
+                                                   disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding text-left flex-wrap" style="margin-top: 10px;">
+                                        <div class="col-lg-6 reduce-padding">
+                                            How long think it each time
+                                        </div>
+                                        <div class="col-lg-6 reduce-padding">
+                                            <input class="form-control" type="number"
+                                                   value="{{ answer.NTCThinkEachTime }}"
+                                                   disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 reduce-padding text-left flex-wrap" style="margin-top: 10px;">
+                                        <div class="col-lg-3 reduce-padding">
+                                            Intensity
+                                        </div>
+                                        <div class="col-lg-9 reduce-padding">
+                                            <input class="form-control" type="text" value="{{ answer.NTCIntensity }}"
+                                                   disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 25px">
+                        <div class="col-lg-12" style="text-align: center">
+                            {% if answer_type == 'category' %}
+                                <button class="btn btn-dark_lila cursor_pointer"
+                                        onclick="backToQuestions('../../../questions/{{ category_name }}/{{ subcategory_name }}')">
+                                    Back to Questions
+                                </button>
+                            {% else %}
+                                <button class="btn btn-dark_lila cursor_pointer"
+                                        onclick="backToQuestions('../../../questions/{{ space_name }}/')">Back to
+                                    Questions
+                                </button>
+                            {% endif %}
+                            <a href="{% url 'practice-session' %}">
+                                <button class="btn btn-dark_lila cursor_pointer">Go to Practice</button>
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        Answer doesn't exist..
+                    </div>
+                    <div class="row" style="margin-top: 25px">
+                        <div class="col-lg-12" style="text-align: center">
+                            <a href="{% url 'awareness_questions' %}">
+                                <button class="btn btn-dark_lila cursor_pointer">Go to Awareness</button>
+                            </a>
+                            <a href="{% url 'practice-session' %}">
+                                <button class="btn btn-dark_lila cursor_pointer">Go to Practice</button>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <div class="recipe-detail min_height_600">
+            <div class="container">
+                <div class="col-12">
+                    Please subscribe to one of our plan to view this page. <a href="{% url 'profile_subscription' %}">Click
+                    Here</a> to go to the subscription page.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block extra_js %}
+    <script>
+        backToQuestions = function (route) {
+            window.location.href = route;
+        };
+        $(function () {
+            var user_login = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+
+            $('.add_to_pack_btn').on('click', function () {
+                var add_button_ = $(this);
+                var session_id = add_button_.data('session_id');
+
+                if (!user_login) {
+                    window.location.assign('/user/login/?next={{ request.path }}');
+
+                } else {
+                    $.ajax({
+                        url: location.origin + '/practice/discover/packs/',
+                        type: 'post',
+                        data: {
+                            'session_id': session_id,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        success: function () {
+                            add_button_.find('i').removeClass('fa-plus').addClass('fa-check');
+                            add_button_.prop('disabled', true);
+                            add_button_.find('span').text('Added to my pack');
+                        },
+                        error: function () {
+                            alert('Something went wrong. Please try again later');
+                        }
+                    })
+                }
+            });
+        });
+    </script>
+{% endblock %}

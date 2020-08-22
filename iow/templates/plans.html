@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block title %}
+    My Packs - I program my nervous system with what I want in my life
+{% endblock %}
+
+{% block main %}
+    <div class="recipe-detail">
+        <div class="container">
+
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-12 text-center">
+                    <h1 class="no_font_weight">Pricing</h1>
+                    <p>
+                        Simple. Fulfilment Guaranteed. Change Your Life. Now.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card-deck mb-3 text-center">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">Free</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">
+                            $0<small class="text-muted">/ mo</small>
+                        </h1>
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>1 Session included</li>
+                            <li>Tracking certain performance metrics</li>
+                            <li>Email support</li>
+                        </ul>
+                        {% if request.user.is_authenticated %}
+                            <button type="button" class="btn btn-block btn-dark_lila btn-big full_width" disabled>
+                                Already included
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-block btn-dark_lila cursor_pointer btn-big full_width">
+                                Sign up for free
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">Pro</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">
+                            $20<small class="text-muted">/ mo</small>
+                        </h1>
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>Unlimited Sessions</li>
+                            <li>Full tracking metrics</li>
+                            <li>Priority email support</li>
+                        </ul>
+                        {% if request.user.profile.has_active_subscription %}
+                            <button type="button" disabled class="btn btn-block btn-primary btn-big full_width">
+                                You have already subscribed
+                            </button>
+                        {% else %}
+                            <a href="{% url 'profile_subscription' %}" class="link_no_underline">
+                                <button type="button" class="btn btn-block btn-primary cursor_pointer btn-big full_width">
+                                    Subscribe now
+                                </button>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

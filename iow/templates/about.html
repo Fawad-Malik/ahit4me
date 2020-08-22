@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block title %}
+    Ahit4me - About us
+{% endblock %}
+
+{% block main %}
+    <div class="recipe-detail">
+        <div class="container">
+
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-10 text-center">
+                    <h3 class="no_font_weight">Who we are</h3>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-5">
+
+                    <h4 class="text-center no_font_weight" style="color: black">
+                        <img src="{% static 'images/mark_image.jpg' %}" style="width: 225px;"> <br><br>
+                        Mark Miller, CEO, Founder
+                    </h4>
+                    <p>
+                        Mark's dream has always been to improve our world.
+                        He constantly thinks about the next important step.
+                        The world needs more personalities like Mark.
+                    </p>
+                </div>
+                <div class="col-lg-5">
+                    <h4 class="text-center no_font_weight" style="color: black">
+                        <img src="{% static 'images/doni.png' %}" style="width: 245px;"> <br><br>
+                        Doniyor Jurabayev, CTO, Python
+                    </h4>
+                    <p>
+                        Doniyor is a passionate python software engineer since 2008. He lives his goal-driven days
+                        to make this world a better place one day with his software code.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(function () {
+            $('.opt_out').on('click', function () {
+                opt_out();
+                $(this).text('Done');
+            });
+        });
+    </script>
+{% endblock %}

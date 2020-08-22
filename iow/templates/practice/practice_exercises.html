@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% load bootstrap4 %}
+{% block title %}
+    Discover your Horizons more
+{% endblock %}
+
+
+{% block main %}
+    <div class="recipe-detail">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-12 text-center">
+                    <h1 class="no_font_weight">
+                        {{ page_text.title|capfirst }}
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                {% if not all_categories %}
+                    <h3>
+                        You do not have any pack yet. Start adding Sessions from Discover page.
+                    </h3>
+                {% endif %}
+
+                {% for cat in all_categories %}
+
+                    {% if cat.practice_sessions %}
+                        <div class="col-lg-12 {% if not forloop.first %}pt-6{% endif %}">
+                            <h2 class="thin_text" style="text-align: left">{{ cat.name|capfirst }}</h2>
+                        </div>
+
+                        {% for ps in cat.practice_sessions %}
+                            <div class="col-lg-4 pb-4">
+                                <div class="box">
+                                    <h4 class="pb-2 font-weight-bold">
+                                        {{ ps.affirmation.title }}
+                                    </h4>
+                                    <p class="mb-5">
+                                        {{ ps.affirmation.affirmation_texts.count }} Affirmations <br>
+                                        {{ ps.affirmation.category.name }}, {{ ps.affirmation.subcategory.name }}
+                                    </p>
+                                    <p class="bottom_position">
+
+                                        {% if ps|is_already_added:request.user %}
+                                            <button class="btn btn-dark_lila round_btn mb-1 cursor_pointer" disabled>
+                                                <i class="fal fa-check"></i> <span>Added to my pack</span>
+                                            </button>
+                                        {% elif not profile.can_have_more_sessions %}
+                                            <a href="{% url 'profile_subscription' %}">
+                                                <button class="btn btn-dark_lila round_btn cursor_pointer">
+                                                    <span>Please subscribe</span>
+                                                </button>
+                                            </a>
+                                        {% else %}
+                                            <button class="btn btn-dark_lila round_btn add_to_pack_btn" data-session_id="{{ ps.id }}">
+                                                <i class="fal fa-plus"></i> <span class="{{ ps.affirmation.title }}">Add to my pack</span>
+                                            </button>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(function () {
+            var user_login = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+
+            $('.add_to_pack_btn').on('click', function () {
+                var add_button_ = $(this);
+                var session_id = add_button_.data('session_id');
+
+                if (!user_login) {
+                    window.location.assign('/user/login/?next={{ request.path }}');
+
+                } else {
+                    $.ajax({
+                        url: '{% url "discover" %}',
+                        type: 'post',
+                        data: {
+                            'session_id': session_id,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        }
+                    }).done(function () {
+                        add_button_.find('i').removeClass('fa-plus').addClass('fa-check');
+                        add_button_.prop('disabled', true);
+                        add_button_.find('span').text('Added to my pack');
+                        window.location.reload()
+                    }).fail(function (err) {
+                        alert('Something went wrong. Please try again later');
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}

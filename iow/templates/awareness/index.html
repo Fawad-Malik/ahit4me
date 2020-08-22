@@ -1,0 +1,369 @@
+{% extends 'base.html' %}
+{% load static custom_tags %}
+{% load bootstrap4 %}
+{% block title %}Let's capture your thoughts{% endblock %}
+
+{% block extra_css %}
+    <script src="{% static 'js/plugins/chronoline.min.js' %}"></script>
+    <link href="{% static 'css/chronoline.min.css' %}" rel="stylesheet">
+    {#    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>#}
+    
+    <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-3.1.0.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+
+    <style>
+        .bg-circles {
+            background: radial-gradient(#4f5cf9, #4f5cf9 20%, #4051f9 20%, #4051f9 45%, #3349f9 45%, #3349f9 63%, #3347f0 63%, #3347f0 70%, #0033f8 70%, #0033f8);
+        }
+    </style>
+    
+{% endblock %}
+
+{% block main %}
+    <div class="col-12 reduce-padding top-title-bar">DEVELOPING AWARENESS</div>
+    {% if request.user.profile.has_active_subscription %}
+        <div class="recipe-detail min_height_600">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 no-padding">
+                        <div class="col-lg-12 text-center" style="padding: 0">
+                            <div style="color: white;display: flex;align-items: center;justify-content: center;height: 42px; border-radius:10px;background-color: rgb(0, 46, 248) !important; border:1.5px solid black; font-size: 32px !important;">
+                                The 3 Areas of Life
+                            </div>
+                        </div>
+                        <div class="col-lg-12 text-center bg-circles" style="border-left:2px solid black;">
+                            <div class="row" style="max-width:1136px !important;">
+                                    {% for x in categories %}
+                                        <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="padding-top:8px;border-right:2px solid black;border-bottom:2px solid black;font-size:1.5rem;color:white;height:56px !important; width:376px !important;">{{ x.category }}</div>
+                                    {% endfor %}
+                            </div>
+                            {% for sub in subCategories %}
+                            <div class="row" style="max-width:1136px !important;">
+                                {% for item in sub.row %}
+                                    {% if item %}
+                                        <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="padding-top:10px;border-right:2px solid black;border-bottom:2px solid black;font-size:20px;color:white; height:56px !important; width:376px !important;float: left; width: 100%;cursor: pointer;"
+                                            onclick="openCategory('../causalforces/{{ item.cat }}/{{ item.sub_cat }}')">
+                                            {{ item.sub_cat }}
+                                        </div>
+                                    {% else %}
+                                        <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="border-right:2px solid black;border-bottom:2px solid black;font-size:20px;color:white; height:56px !important; width:376px !important;"></div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+
+                            <div class="d-lg-block d-md-block d-sm-none d-none" style="background: white; color: #2C2828; font-size: 22px;margin-left:-15px;width:1107px;border-right:2px solid black;">YOU ARE IN</div>
+                            <div class="row" style="height:60px !important; border-top: 1.5px solid black; border-bottom:1.5px solid black;margin-left:-15px;width:1107px;border-right:2px solid black;">
+                                <div class="col-lg-4 col-md-4 col-sm-12 d-lg-block d-md-block d-sm-none d-none" style="color: white !important; padding-top: 14px !important; font-size:20px !important;">
+                                    Past
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12 d-lg-block d-md-block d-sm-none d-none" style="color: white !important;  font-size: 16px; padding-top: 14px !important; font-size:20px !important;">
+                                    The Center Of Your Universe
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12 d-lg-block d-md-block d-sm-none d-none" style="color: white !important; padding-top: 14px !important; font-size:20px !important;">
+                                    Future
+                                </div>
+                            </div>
+                            <div style="background: white; color: #2C2828; font-size:22px !important;margin-left:-15px;width:1107px;border-right:2px solid black;">RIGHT NOW</div>
+                            <div class="row" style="">
+                                {% for space in spaces %}
+                                    {% if forloop.counter0|divisibleby:3 %}
+                                        <!--<div class="row" style="max-width:1136px !important;margin-left:0px;margin-right:-4px;">-->
+                                    {% endif %}
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="padding-top:10px !important;border-right:2px solid black;border-bottom:2px solid black;font-size:20px;color:white; height:56px !important; width:376px !important;cursor: pointer;"
+                                        onclick="openCategory('questions/{{ space.name }}')">
+                                        {{ space.name }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="recipe-detail min_height_600">
+            <div class="container">
+                <div class="col-12">
+                    Please subscribe to one of our plan to view this page. <a href="{% url 'profile_subscription' %}">Click
+                    Here</a> to go to the subscription page.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    
+{% endblock %}
+{% block extra_js %}
+    <script>
+        function openEditModal(id, timelineID, categoryID, starttime, endtime) {
+            $('#update_activity_start_time_field').val(starttime);
+            $('#update_activity_end_time_field').val(endtime);
+            $('#update_activity_timeline_id').val(timelineID);
+            $('#update_activity_category_id').val(categoryID);
+            $('#update_activity_id').val(parseInt(id));
+            $('#update-activity-error-msg').css('display', 'none');
+            $('.update_activity_modal').modal('show');
+            $('.knowledge_detail_modal').modal('hide');
+        }
+
+        function openCategory(val) {
+            window.location.href = val;
+        }
+
+        function openKnowledgeModal(route, text, heading) {
+            $('#knowledge-modal-heading').text(heading);
+            $('#knowledge-modal-body').text(text);
+            $('#knowledge-modal-footer a').attr("href", route);
+            $('.knowledge_detail_modal').modal('show');
+        }
+
+        $('.save_preferences').on('click', function () {
+            var startTime = $('#start_time_field').val();
+            var endTime = $('#end_time_field').val();
+            var timelineID = $('#new_timeline_id').val();
+            var categoryID = $('#new_category_id').val();
+            if (!startTime || !endTime || !timelineID || !categoryID) {
+                $('#error-modal-body').html("<p>Please fill out all fields...</p>");
+                $('.error_modal').modal('show');
+                $('.add_new_activity_modal').modal('hide');
+                return;
+            }
+            if (startTime >= endTime) {
+                $('#error-modal-body').html("<p>Invalid Time: Start and end time are not valid. End time should be greater than start time...</p>");
+                $('.error_modal').modal('show');
+                $('.add_new_activity_modal').modal('hide');
+                return;
+            }
+            $.ajax({
+                url: '/awareness/add-new-timeline/',
+                type: 'post',
+                data: {
+                    start_time: startTime,
+                    end_time: endTime,
+                    timeline_id: timelineID,
+                    category_id: categoryID,
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function (res) {
+                    $('.add_new_activity_modal').modal('hide');
+                    location.reload();
+                },
+                error: function (res) {
+                    response = JSON.parse(res.responseText);
+                    $('#error-modal-body').html(response.msg);
+                    $('.add_new_activity_modal').modal('hide');
+                    $('.error_modal').modal('show');
+                }
+            })
+        });
+        $('.update_activity').on('click', function () {
+            $('#update-activity-error-msg').css('display', 'none');
+            $('#update_activity_start_time_field').removeClass('border-danger');
+            $('#update_activity_end_time_field').removeClass('border-danger');
+            $('#update_activity_timeline_id').removeClass('border-danger');
+            $('#update_activity_category_id').removeClass('border-danger');
+            $('#activity-delete-confirmation').css('display', 'none');
+            var startTime = $('#update_activity_start_time_field').val();
+            var endTime = $('#update_activity_end_time_field').val();
+            var timelineID = $('#update_activity_timeline_id').val();
+            var categoryID = $('#update_activity_category_id').val();
+            var ID = $('#update_activity_id').val();
+            if (!startTime || !endTime || !timelineID || !categoryID) {
+                $('#update-activity-error-msg').text("Please complete all fields...");
+                $('#update-activity-error-msg').css('display', 'unset');
+                if (!startTime) {
+                    $('#update_activity_start_time_field').addClass('border-danger');
+                }
+                if (!endTime) {
+                    $('#update_activity_end_time_field').addClass('border-danger');
+                }
+                if (!timelineID) {
+                    $('#update_activity_timeline_id').addClass('border-danger');
+                }
+                if (!categoryID) {
+                    $('#update_activity_category_id').addClass('border-danger');
+                }
+                return;
+            }
+            if (startTime >= endTime) {
+                $('#update-activity-error-msg').text("Invalid Time: Start and end time are not valid. End time should be greater than start time...");
+                $('#update-activity-error-msg').css('display', 'unset');
+                $('#update_activity_start_time_field').addClass('border-danger');
+                $('#update_activity_end_time_field').addClass('border-danger');
+                return;
+            }
+            $.ajax({
+                url: '/awareness/update-activity/',
+                type: 'post',
+                data: {
+                    start_time: startTime,
+                    end_time: endTime,
+                    timeline_id: timelineID,
+                    category_id: categoryID,
+                    activity_id: ID,
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function (res) {
+                    $('.update_activity_modal').modal('hide');
+                    location.reload();
+                },
+                error: function (res) {
+                    response = JSON.parse(res.responseText);
+                    $('#update-activity-error-msg').text(response.msg)
+                    $('#update-activity-error-msg').css('display', 'unset');
+                }
+            })
+        });
+        $('.delete_activity').on('click', function () {
+            $('#activity-delete-confirmation').css('display', 'block');
+        });
+        $('#cancel-delete-activity').on('click', function () {
+            $('#activity-delete-confirmation').css('display', 'none');
+        });
+        $('#confirm-delete-activity').on('click', function () {
+            var ID = $('#update_activity_id').val();
+            $.ajax({
+                url: '/awareness/delete-activity/',
+                type: 'post',
+                data: {
+                    activity_id: ID,
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function (res) {
+                    $('.update_activity_modal').modal('hide');
+                    location.reload();
+                },
+                error: function (res) {
+                    response = JSON.parse(res.responseText);
+                    $('#update-activity-error-msg').text(response.msg)
+                    $('#update-activity-error-msg').css('display', 'unset');
+                }
+            });
+        });
+        $('.update_timeline').on('click', function () {
+            var startTime = $('#update_start_time_field').val();
+            var endTime = $('#update_end_time_field').val();
+            if (!startTime || !endTime) {
+                $('#update-error-modal-body').html("<p>Please choose a valid start and end time...</p>");
+                $('.update_error_modal').modal('show');
+                $('.add_new_timeline_modal').modal('hide');
+                return;
+            }
+            if (startTime >= endTime) {
+                $('#update-error-modal-body').html("<p>Invalid Time: Start and end time are not valid. End time should be greater than start time...</p>");
+                $('.update_error_modal').modal('show');
+                $('.add_new_timeline_modal').modal('hide');
+                return;
+            }
+            $.ajax({
+                url: '/awareness/update-user-time/',
+                type: 'post',
+                data: {
+                    start_time: startTime,
+                    end_time: endTime,
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function (res) {
+                    $('.add_new_timeline_modal').modal('hide');
+                    location.reload();
+                },
+                error: function (res) {
+                    response = JSON.parse(res.responseText);
+                    $('#update-error-modal-body').html(response.msg);
+                    $('.add_new_timeline_modal').modal('hide');
+                    $('.update_error_modal').modal('show');
+                }
+            })
+        });
+
+        $(document).ready(function () {
+
+            let decodedText = '{{ timeline_option }}'
+            decodedText = decodedText.replace(new RegExp('&quot;', 'g'), '"');
+            let options = JSON.parse(decodedText);
+
+            var start = new Date(2018, 1, options.starttime == 0 ? 1 : options.starttime);
+
+            var end = new Date(2018, 1, options.endtime);
+
+            let events = [];
+            {% for usertimeline in usertimelines %}
+                var event = {};
+                var string_end_time_mints = Number({{ usertimeline.string_end_time_mints }});
+                var string_start_time_mints = Number({{ usertimeline.string_start_time_mints }});
+                event.dates = [
+                    new Date(2018, 1, {{ usertimeline.string_start_time_hour }}, Math.floor(string_start_time_mints / 2) + 14),
+                    new Date(2018, 1, {{ usertimeline.string_end_time_hour }}, Math.floor(string_end_time_mints / 2) + 9)
+                ];
+                event.title = "{{ usertimeline.timeline.name }}";
+                event.usertimeline_id = {{ usertimeline.id }};
+                event.timeline_id = {{ usertimeline.timeline.id }};
+                event.category_id = {{ usertimeline.category.id }};
+                event.string_start_time = "{{ usertimeline.string_start_time }}";
+                event.string_end_time = "{{ usertimeline.string_end_time }}";
+                event.fundamental_knowledge = "{{ usertimeline.timeline.fundamentalKnowledge }}";
+                event.fundamental_knowledge_url = "{{ usertimeline.timeline.fundamentalKnowledgePage.get_absolute_url }}";
+                event.detailed_knowledge = "{{ usertimeline.timeline.detailedKnowledge }}";
+                event.detailed_knowledge_url = "{{ usertimeline.timeline.detailedKnowledgePage.get_absolute_url }}";
+
+                events.push(event);
+            {% endfor %}
+
+            let sections = [];
+            for (var i = options.starttime; i < options.endtime; i += 2) {
+                sections.push({
+                    dates: [new Date(2018, 1, i), new Date(2018, 1, i + 2)],
+                    title: i + ":00 to " + (i + 2) + ":00",
+                    section: 1,
+                    attrs: {fill: "#f1f1f1"},
+                    start_date: i + ":00",
+                    end_date: i + 2 + ":00",
+                })
+            }
+
+            /*var timeline1 = new Chronoline(document.getElementById("target1"), events,
+                {
+                    animated: true,
+                    tooltips: true,
+                    defaultStartDate: start,
+                    startDate: start,
+                    endDate: end,
+                    sections: sections,
+                    sectionLabelAttrs: {'fill': '#997e3d', 'font-weight': 'bold'},
+                    scrollable: false,
+                    floatingSectionLabels: false,
+                    floatingSubLabels: false,
+                    floatingSubSubLabels: false,
+                    visibleSpan: DAY_IN_MILLISECONDS * options.endtime,
+                    eventClick: function (data) {
+                        $('#edit_event_button').attr('onClick', 'openEditModal('
+                            + data.usertimeline_id + ', '
+                            + data.timeline_id + ', '
+                            + data.category_id + ', \"'
+                            + data.string_start_time + '\", \"'
+                            + data.string_end_time + '\"' +
+                            ')');
+
+                        $('#event_heading').text(data.title + " " +
+                            data.string_start_time + "-" +
+                            data.string_end_time
+                        );
+
+                        $('#fundamental_knowledge_para').text(data.fundamental_knowledge);
+                        $('#fundamental_knowledge_link').attr("href", data.fundamental_knowledge_url);
+                        $('#detailed_knowledge_para').text(data.detailed_knowledge);
+                        $('#detailed_knowledge_link').attr("href", data.detailed_knowledge_url);
+
+                        $('.event_click_modal').modal('show');
+                    },
+                    sectionClick: function (data, date) {
+                        window.location.href = './daily-tasks/' + data.start_date + '/' + data.end_date;
+                    },
+            });*/
+        });
+    </script>
+{% endblock %}
